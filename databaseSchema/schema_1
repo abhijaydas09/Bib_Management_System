@@ -1,0 +1,205 @@
+use BibManagementSystem
+db.createCollection("users")
+db.users.insertOne({
+    username: "",
+    password_hash: "",
+    role: null,
+    is_active: false,
+    email: "",
+    name: "",
+    admin_info: {
+        admin_privileges: "",
+        dashboard_access: false
+    },
+    staff_info: {
+        scanner_access: false,
+        location_assigned: ""
+    }
+})
+
+db.users.insertOne({
+    username: "sampleuser",
+    password_hash: "hashedpassword",
+    role: "admin",
+    is_active: true,
+    email: "user@example.com",
+    name: "Sample User",
+    admin_info: {
+        admin_privileges: "all",
+        dashboard_access: true
+    },
+    staff_info: {
+        scanner_access: false,
+        location_assigned: ""
+    }
+})
+
+db.createCollection("admin_actions")
+
+db.admin_actions.insertOne({
+    admin_id: ObjectId("64f1a2b3c4d5e6f789012345"), // replace with a real user _id
+    action_type: "login",
+    description: "Admin logged in",
+    action_timestamp: ISODate("2024-06-01T12:00:00Z")
+})
+
+db.admin_actions.find()
+
+// Categories Collection
+db.createCollection("categories", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["category_name"],
+            properties: {
+                _id: { bsonType: "objectId" },
+                category_name: {
+                    bsonType: "string",
+                    maxLength: 100
+                },
+                description: { bsonType: "string" },
+                age_group: {
+                    bsonType: "string",
+                    maxLength: 50
+                }
+            }
+        }
+    }
+});
+db.categories.insertOne({
+    category_name: "Children's Books",
+    description: "Books suitable for children aged 0-12",
+    age_group: "0-12"
+})
+
+// Events Collection
+db.createCollection("events", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["event_name", "event_date"],
+            properties: {
+                _id: { bsonType: "objectId" },
+                event_name: {
+                    bsonType: "string",
+                    maxLength: 200
+                },
+                event_date: { bsonType: "date" },
+                location: {
+                    bsonType: "string",
+                    maxLength: 300
+                },
+                status: {
+                    enum: ["planned", "active", "completed", "cancelled"],
+                    description: "Event status"
+                },
+                category_id: {
+                    bsonType: "objectId",
+                    description: "Reference to categories collection"
+                },
+                // Embedded participants for this event
+                participants: {
+                    bsonType: "array",
+                    items: {
+                        bsonType: "objectId",
+                        description: "References to participant documents"
+                    }
+                }
+            }
+        }
+    }
+});
+db.events.insertOne({
+    event_name: "Summer Reading Program",
+    event_date: ISODate("2024-07-15T10:00:00Z"),
+    location: "Main Library Auditorium",
+    status: "planned",
+    category_id: ObjectId("64f1a2b3c4d5e6f789012345"), // replace with a real category _id
+    participants: []
+})
+
+db.events.find()
+db.categories.find()
+
+// Participants Collection
+db.createCollection("participants", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["event_name", "category", "bib_number"],
+            properties: {
+                _id: { bsonType: "objectId" },
+                user_id: {
+                    bsonType: "objectId",
+                    description: "Reference to users collection"
+                },
+                event_name: {
+                    bsonType: "string",
+                    maxLength: 200
+                },
+                category: {
+                    bsonType: "string",
+                    maxLength: 100
+                },
+                bib_number: {
+                    bsonType: "string",
+                    maxLength: 20
+                },
+                qr_code: {
+                    bsonType: "string",
+                    maxLength: 500
+                },
+                registration_date: { bsonType: "date" },
+
+                // Embedded bib assignments : not sure of this functionality .
+                bib_assignments: {
+                    bsonType: "array",
+                    items: {
+                        bsonType: "object",
+                        required: ["staff_id", "assigned_at"],
+                        properties: {
+                            assignment_id: { bsonType: "objectId" },
+                            staff_id: {
+                                bsonType: "objectId",
+                                description: "Reference to staff user"
+                            },
+                            assigned_at: { bsonType: "date" },
+                            picked_up_at: { bsonType: "date" },
+                            device_info: { bsonType: "string" },
+                            location_info: { bsonType: "string" }
+                        }
+                    }
+                },
+
+                // Embedded scan logs
+                scan_logs: {
+                    bsonType: "array",
+                    items: {
+                        bsonType: "object",
+                        required: ["scanned_by", "scan_time"],
+                        properties: {
+                            log_id: { bsonType: "objectId" },
+                            scanned_by: {
+                                bsonType: "objectId",
+                                description: "Reference to staff user who scanned"
+                            },
+                            scan_time: { bsonType: "date" },
+                            device_info: { bsonType: "string" },
+                            location_info: { bsonType: "string" }
+                        }
+                    }
+                }
+            }
+        }
+    }
+});
+db.participants.insertOne({
+    user_id: ObjectId("64f1a2b3c4d5e6f789012345"), // replace with a real user _id
+    event_name: "Summer Reading Program",
+    category: "Children's Books",
+    bib_number: "BIB123456",
+    qr_code: "https://example.com/qr/BIB123456",
+    registration_date: ISODate("2024-06-01T12:00:00Z"),
+    bib_assignments: [],
+    scan_logs: []
+})
