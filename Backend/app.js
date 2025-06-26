@@ -14,7 +14,7 @@ app.get('/' , (req,res)=>{
     res.send('Hello world')
 })
 
-
+ 
 const server = () =>{
     db()
     app.listen(PORT ,()=>{
