@@ -1,42 +1,403 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Poppins:wght@400;600;700;900&display=swap');
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #0a2342 0%, #274690 100%);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
+}
+
+.landing-root {
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1.5rem;
+  background: rgba(10, 35, 66, 0.85);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid rgba(39, 70, 144, 0.12);
+}
+.logo-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #3e7cb1;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 12px #3e7cb133;
+}
+.navbar nav {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+.navbar nav a, .navbar nav button {
+  margin-left: 0.7rem;
+  margin-right: 0.7rem;
+  padding: 0.5rem 1.1rem;
+}
+.navbar a {
+  text-decoration: none;
+  color: #eaf6fb;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+.navbar a:hover {
+  color: #3e7cb1;
+}
+.login-btn {
+  background: linear-gradient(90deg, #3e7cb1 0%, #274690 100%);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 12px #3e7cb133;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.login-btn:hover {
+  background: linear-gradient(90deg, #274690 0%, #3e7cb1 100%);
+  box-shadow: 0 4px 24px #3e7cb155;
+}
+.hero, .features, .highlights {
+  padding: 4rem 2rem 2rem 2rem;
+  margin-bottom: 2rem;
+  border-radius: 2rem;
+}
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #274690 0%, #3e7cb1 100%);
+  color: #fff;
+  box-shadow: 0 8px 32px #3e7cb122;
+  position: relative;
+  overflow: hidden;
+}
+.hero-with-image {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  position: relative;
+}
+.hero-content {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.hero-image {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 260px;
+  max-width: 420px;
+  position: relative;
+}
+.hero-image img {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px #3e7cb133;
+  object-fit: cover;
+  aspect-ratio: 4/3;
+  opacity: 0;
+  animation: fadeInImg 1.2s ease 0.2s forwards;
+  position: relative;
+  z-index: 1;
+}
+.hero-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 2rem;
+  background: linear-gradient(120deg, #27469099 0%, #3e7cb199 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+@keyframes fadeInImg {
+  from { opacity: 0; transform: scale(1.04); }
+  to { opacity: 1; transform: scale(1); }
+}
+.hero h1 {
+  font-family: 'Inter', 'Poppins', 'Segoe UI', Arial, sans-serif;
+  font-size: 3.2rem;
+  font-weight: 900;
+  margin-bottom: 1.2rem;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 24px #27469055;
+  z-index: 1;
+}
+.hero p {
+  font-size: 1.4rem;
+  margin-bottom: 2.2rem;
+  max-width: 650px;
+  z-index: 1;
+  color: #eaf6fb;
+}
+.cta-buttons {
+  display: flex;
+  gap: 1.2rem;
+  z-index: 1;
+}
+.cta-buttons .primary {
+  background: linear-gradient(90deg, #3e7cb1 0%, #274690 100%);
+  color: #fff;
+  border: none;
+  padding: 0.9rem 2.2rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 12px #3e7cb133;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.cta-buttons .primary:hover {
+  background: linear-gradient(90deg, #274690 0%, #3e7cb1 100%);
+  color: #fff;
+  box-shadow: 0 4px 24px #3e7cb155;
+}
+.cta-buttons .secondary {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 0.9rem 2.2rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  backdrop-filter: blur(2px);
+}
+.cta-buttons .secondary:hover {
+  background: #fff;
+  color: #274690;
+}
+.features, .highlights {
+  background: linear-gradient(120deg, #1b3358 0%, #3e7cb1 100%);
+  box-shadow: 0 4px 24px #3e7cb122;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  backdrop-filter: blur(8px);
+  margin-top: 3.5rem;
+  margin-bottom: 3.5rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+.features h2 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 2.2rem;
+  letter-spacing: 1px;
+}
+.feature-cards {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.feature-card {
+  background: rgba(255,255,255,0.10);
+  border-radius: 1.5rem;
+  padding: 2.2rem 1.7rem;
+  min-width: 220px;
+  max-width: 320px;
+  flex: 1 1 260px;
+  box-shadow: 0 2px 16px #3e7cb122;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  border: 1.5px solid #3e7cb133;
+  transition: transform 0.18s, box-shadow 0.18s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.feature-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px #3e7cb133;
+}
+.feature-card h3 {
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.7rem;
+}
+.feature-card p {
+  color: #eaf6fb;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+.feature-icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px #3e7cb122);
+  opacity: 0;
+  animation: fadeInImg 1.2s ease 0.4s forwards;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.feature-card:hover .feature-icon {
+  transform: scale(1.12) rotate(-4deg);
+  box-shadow: 0 8px 32px #3e7cb133;
+}
+.highlights h2 {
+  color: #fff;
+  font-size: 2.1rem;
+  font-weight: 900;
+  margin-bottom: 1.7rem;
+  letter-spacing: 1px;
+}
+.highlights ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+.highlights li {
+  background: linear-gradient(90deg, #3e7cb1 0%, #274690 100%);
+  color: #fff;
+  font-weight: 700;
+  padding: 1.1rem 2.2rem;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px #3e7cb133;
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
+  border: 2px solid #fff2;
+  transition: background 0.2s, color 0.2s;
+}
+.highlights li:hover {
+  background: #fff;
+  color: #274690;
+}
+.footer {
   text-align: center;
+  padding: 2rem 1rem 1rem 1rem;
+  color: #eaf6fb;
+  font-size: 1.05rem;
+  background: transparent;
+  margin-top: auto;
+  letter-spacing: 1px;
 }
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.section-title {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 2.2rem;
+  color: #fff;
+  letter-spacing: 1px;
+  font-weight: 900;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 900px) {
+  .feature-cards {
+    flex-direction: column;
+    align-items: center;
   }
-  to {
-    transform: rotate(360deg);
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 1rem;
+  }
+  .hero, .features, .highlights {
+    padding: 2rem 1rem 1rem 1rem;
+  }
+  .hero h1 {
+    font-size: 2.1rem;
   }
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.hero.hero-landing {
+  position: relative;
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
+  background: linear-gradient(135deg, #0a2342 0%, #274690 100%);
+  box-shadow: none;
+  border-radius: 0;
+  margin-bottom: 0;
+  overflow: hidden;
 }
-
-.card {
-  padding: 2em;
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('https://media.gq-magazine.co.uk/photos/6422b37b0fbd5769bddf8d56/16:9/w_2560%2Cc_limit/How-to-train-for-a-marathon-hp-a.jpg') center center/cover no-repeat;
+  opacity: 0.35;
+  z-index: 0;
 }
-
-.read-the-docs {
-  color: #888;
+.hero-center-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 0;
+  margin-top: 2.5rem;
+}
+.hero-title {
+  color: #fff;
+  font-size: 2.7rem;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 24px #27469099, 0 2px 12px #1b335899;
+  margin: 0 auto;
+  max-width: 900px;
+}
+.hero-below-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+.hero-desc {
+  color: #eaf6fb;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 2.2rem;
+  max-width: 700px;
 }

@@ -1,0 +1,76 @@
+.profile-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #1b3358 0%, #3e7cb1 100%);
+  z-index: 1000;
+}
+
+.profile-box {
+  background: rgba(10, 35, 66, 0.95);
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px #3e7cb122;
+  padding: 3rem 2.5rem 2.5rem 2.5rem;
+  min-width: 340px;
+  max-width: 370px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-title {
+  color: #fff;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.profile-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.profile-form input {
+  padding: 0.9rem 1.2rem;
+  border-radius: 1rem;
+  border: 1.5px solid #3e7cb133;
+  background: rgba(255,255,255,0.10);
+  color: #fff;
+  font-size: 1.1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.2s, background 0.2s;
+}
+.profile-form input:focus {
+  border: 1.5px solid #3e7cb1;
+  background: rgba(255,255,255,0.18);
+}
+
+.profile-submit {
+  background: linear-gradient(90deg, #3e7cb1 0%, #274690 100%);
+  color: #fff;
+  border: none;
+  padding: 0.9rem 2.2rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 12px #3e7cb133;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.profile-submit:hover {
+  background: linear-gradient(90deg, #274690 0%, #3e7cb1 100%);
+  color: #fff;
+  box-shadow: 0 4px 24px #3e7cb155;
+} 

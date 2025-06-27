@@ -1,0 +1,99 @@
+.contact-root {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(120deg, #1b3358 0%, #3e7cb1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0 2rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center center/cover no-repeat;
+  opacity: 0.18;
+  z-index: 0;
+}
+
+.contact-box {
+  background: rgba(10, 35, 66, 0.95);
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px #3e7cb122;
+  padding: 3rem 2.5rem 2.5rem 2.5rem;
+  min-width: 340px;
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-title {
+  color: #fff;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.contact-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 0.9rem 1.2rem;
+  border-radius: 1rem;
+  border: 1.5px solid #3e7cb133;
+  background: rgba(255,255,255,0.10);
+  color: #fff;
+  font-size: 1.1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.2s, background 0.2s;
+  resize: none;
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border: 1.5px solid #3e7cb1;
+  background: rgba(255,255,255,0.18);
+}
+
+.contact-submit {
+  background: linear-gradient(90deg, #3e7cb1 0%, #274690 100%);
+  color: #fff;
+  border: none;
+  padding: 0.9rem 2.2rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 12px #3e7cb133;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.contact-submit:hover {
+  background: linear-gradient(90deg, #274690 0%, #3e7cb1 100%);
+  color: #fff;
+  box-shadow: 0 4px 24px #3e7cb155;
+}
+
+.contact-success {
+  color: #fff;
+  background: #3e7cb1;
+  padding: 1.2rem 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 2px 12px #3e7cb133;
+} 
