@@ -1,57 +1,114 @@
 import React, { useState } from 'react';
 import './Login.css';
 import UserProfile from './UserProfile';
+import { useAuth } from '../contexts/AuthContext';
 
 function Login({ onLogin }) {
+  const { signup, login } = useAuth();
   const [role, setRole] = useState('participant');
-  const [form, setForm] = useState({ email: '', password: '', confirmPassword: '' });
+  const [form, setForm] = useState({ 
+    username: '', 
+    email: '', 
+    password: '', 
+    confirmPassword: '',
+    name: ''
+  });
   const [mode, setMode] = useState('login'); // 'login' or 'signup'
   const [showProfile, setShowProfile] = useState(false);
-  const [profileComplete, setProfileComplete] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError('');
   };
 
   const handleRoleChange = (newRole) => {
     setRole(newRole);
-    setForm({ email: '', password: '', confirmPassword: '' });
+    setForm({ username: '', email: '', password: '', confirmPassword: '', name: '' });
+    setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (mode === 'signup') {
-      if (form.password !== form.confirmPassword) {
-        alert('Passwords do not match!');
-        return;
+    setLoading(true);
+    setError('');
+
+    try {
+      if (mode === 'signup') {
+        // Validation
+        if (form.password !== form.confirmPassword) {
+          setError('Passwords do not match!');
+          return;
+        }
+
+        if (form.password.length < 6) {
+          setError('Password must be at least 6 characters long');
+          return;
+        }
+
+        if (!form.username || !form.email || !form.password || !form.name) {
+          setError('All fields are required');
+          return;
+        }
+
+        // Signup
+        const signupData = {
+          username: form.username,
+          email: form.email,
+          password: form.password,
+          name: form.name,
+          role: role === 'participant' ? 'user' : 'staff'
+        };
+
+        const response = await signup(signupData);
+        
+        // Check if profile completion is needed
+        if (response.profile_status?.needs_profile_completion) {
+          console.log('Login: Profile completion needed, showing profile form');
+          setShowProfile(true);
+          // Always call onLogin to hide the login modal
+          if (onLogin) onLogin(role);
+        } else {
+          console.log('Login: Profile complete, calling onLogin');
+          if (onLogin) onLogin(role);
+        }
+      } else {
+        // Login
+        const loginData = {
+          username: form.email, // Can be email or username
+          password: form.password
+        };
+
+        const response = await login(loginData);
+        
+        // Check if profile completion is needed
+        if (response.profile_status?.needs_profile_completion) {
+          console.log('Login: Profile completion needed, showing profile form');
+          setShowProfile(true);
+          // Always call onLogin to hide the login modal
+          if (onLogin) onLogin(role);
+        } else {
+          console.log('Login: Profile complete, calling onLogin');
+          if (onLogin) onLogin(role);
+        }
       }
-      // Placeholder for sign-up logic
-      setShowProfile(true);
-    } else {
-      // Placeholder for login logic
-      if (onLogin) onLogin(role);
-      else alert(`Logging in as ${role}: ${form.email}`);
+    } catch (error) {
+      setError(error.error || 'An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleProfileSubmit = (profileData) => {
-    setProfileComplete(true);
-    setTimeout(() => {
-      setShowProfile(false);
-      setProfileComplete(false);
-      setMode('login');
-      if (onLogin) onLogin(role);
-    }, 2000);
+    setShowProfile(false);
+    if (onLogin) onLogin(role);
   };
 
   if (showProfile) {
     return (
       <div className={`login-root ${role}`}>
-        {profileComplete ? (
-          <div className="login-box"><h2 style={{color:'#fff',textAlign:'center'}}>Profile completed!<br/>You can now log in.</h2></div>
-        ) : (
-          <UserProfile role={role} onSubmit={handleProfileSubmit} />
-        )}
+        <UserProfile role={role} onSubmit={handleProfileSubmit} />
       </div>
     );
   }
@@ -73,10 +130,41 @@ function Login({ onLogin }) {
             Organiser
           </button>
         </div>
+        
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
+
         <form className="login-form" onSubmit={handleSubmit}>
           <h2 className="login-title">
             {role === 'participant' ? 'Participant' : 'Organiser'} {mode === 'login' ? 'Login' : 'Sign Up'}
           </h2>
+          
+          {mode === 'signup' && (
+            <>
+              <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={form.username}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </>
+          )}
+          
           <input
             type="email"
             name="email"
@@ -84,6 +172,7 @@ function Login({ onLogin }) {
             value={form.email}
             onChange={handleChange}
             required
+            disabled={loading}
           />
           <input
             type="password"
@@ -92,6 +181,7 @@ function Login({ onLogin }) {
             value={form.password}
             onChange={handleChange}
             required
+            disabled={loading}
           />
           {mode === 'signup' && (
             <input
@@ -101,18 +191,40 @@ function Login({ onLogin }) {
               value={form.confirmPassword}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           )}
-          <button type="submit" className="login-submit">{mode === 'login' ? 'Login' : 'Sign Up'}</button>
+          <button 
+            type="submit" 
+            className="login-submit"
+            disabled={loading}
+          >
+            {loading ? 'Please wait...' : (mode === 'login' ? 'Login' : 'Sign Up')}
+          </button>
         </form>
+        
         <div className="login-switch">
           {mode === 'login' ? (
             <span>Don't have an account?{' '}
-              <button type="button" className="switch-btn" onClick={() => setMode('signup')}>Sign Up</button>
+              <button 
+                type="button" 
+                className="switch-btn" 
+                onClick={() => setMode('signup')}
+                disabled={loading}
+              >
+                Sign Up
+              </button>
             </span>
           ) : (
             <span>Already have an account?{' '}
-              <button type="button" className="switch-btn" onClick={() => setMode('login')}>Login</button>
+              <button 
+                type="button" 
+                className="switch-btn" 
+                onClick={() => setMode('login')}
+                disabled={loading}
+              >
+                Login
+              </button>
             </span>
           )}
         </div>

@@ -1,76 +1,552 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Poppins:wght@400;600;700;900&display=swap');
+
 .profile-root {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(120deg, #1b3358 0%, #3e7cb1 100%);
-  z-index: 1000;
+  align-items: flex-start;
+  min-height: calc(100vh - 80px);
+  height: auto;
+  width: 100vw;
+  background: linear-gradient(135deg, #0a2342 0%, #274690 100%);
+  padding: 0;
+  margin: 0;
+  font-family: 'Poppins', 'Inter', 'Segoe UI', Arial, sans-serif;
+  position: relative;
+  top: 80px;
+  left: 0;
+  overflow-y: auto;
+  margin-top: 400px;
 }
 
 .profile-box {
   background: rgba(10, 35, 66, 0.95);
   border-radius: 2rem;
   box-shadow: 0 8px 32px #3e7cb122;
-  padding: 3rem 2.5rem 2.5rem 2.5rem;
-  min-width: 340px;
-  max-width: 370px;
+  padding: 2rem;
   width: 100%;
+  max-width: 800px;
+  position: relative;
+  border: 1.5px solid #3e7cb133;
+  backdrop-filter: blur(12px);
+  margin: 2rem 0 2rem 0;
+  min-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: flex-start;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
 
 .profile-title {
   color: #fff;
-  text-align: center;
-  font-size: 1.6rem;
+  font-size: 2.2rem;
   font-weight: 900;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 24px #27469055;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3e7cb1 0%, #274690 100%);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+  box-shadow: 0 2px 12px #3e7cb133;
+}
+
+.step-indicator {
+  color: #eaf6fb;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
   letter-spacing: 1px;
 }
 
 .profile-form {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profile-step {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 }
 
-.profile-form input {
-  padding: 0.9rem 1.2rem;
-  border-radius: 1rem;
-  border: 1.5px solid #3e7cb133;
-  background: rgba(255,255,255,0.10);
+.profile-step h3 {
   color: #fff;
-  font-size: 1.1rem;
-  font-family: inherit;
-  outline: none;
-  transition: border 0.2s, background 0.2s;
-}
-.profile-form input:focus {
-  border: 1.5px solid #3e7cb1;
-  background: rgba(255,255,255,0.18);
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-align: center;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 12px #27469055;
 }
 
-.profile-submit {
+.profile-step h4 {
+  color: #eaf6fb;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 1.5rem 0 1rem 0;
+  letter-spacing: 0.5px;
+}
+
+.profile-form input,
+.profile-form select {
+  padding: 1.2rem 1.8rem;
+  border: 1.5px solid #3e7cb133;
+  border-radius: 1rem;
+  font-size: 1.1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  backdrop-filter: blur(2px);
+  width: 650px;
+  margin: 0 auto;
+  height: 3.8rem;
+  box-sizing: border-box;
+}
+
+.profile-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1.5rem center;
+  background-size: 1.2rem;
+  padding-right: 3.5rem;
+}
+
+.profile-form input:focus,
+.profile-form select:focus {
+  outline: none;
+  border-color: #3e7cb1;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 3px rgba(62, 124, 177, 0.2);
+}
+
+.profile-form input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.profile-form select option {
+  background: #1b3358;
+  color: #fff;
+  padding: 1rem;
+}
+
+/* Input groups for better spacing */
+.input-group {
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.input-group input,
+.input-group select {
+  width: 650px;
+  height: 3.8rem;
+  padding: 1.2rem 1.8rem;
+}
+
+/* Address grid layout */
+.address-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.address-grid .input-group {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.address-grid .input-group input,
+.address-grid .input-group select {
+  width: 100%;
+  height: 3.8rem;
+  padding: 1.2rem 1.8rem;
+}
+
+/* Profile actions */
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 999px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: inherit;
+}
+
+.btn-primary {
   background: linear-gradient(90deg, #3e7cb1 0%, #274690 100%);
   color: #fff;
-  border: none;
-  padding: 0.9rem 2.2rem;
-  border-radius: 999px;
-  font-weight: 800;
-  font-size: 1.1rem;
   box-shadow: 0 2px 12px #3e7cb133;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
-.profile-submit:hover {
-  background: linear-gradient(90deg, #274690 0%, #3e7cb1 100%);
-  color: #fff;
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
   box-shadow: 0 4px 24px #3e7cb155;
+  background: linear-gradient(90deg, #274690 0%, #3e7cb1 100%);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.12);
+  color: #eaf6fb;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(2px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+
+.error-message {
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.2) 100%);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  color: #ff6b6b;
+  padding: 1rem 1.5rem;
+  border-radius: 0.8rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(220, 53, 69, 0.2);
+}
+
+.success-message {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.2) 100%);
+  border: 1px solid rgba(40, 167, 69, 0.3);
+  color: #28a745;
+  padding: 1rem 1.5rem;
+  border-radius: 0.8rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(40, 167, 69, 0.2);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loading-message {
+  background: rgba(62, 124, 177, 0.2);
+  color: #3e7cb1;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(62, 124, 177, 0.3);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+  backdrop-filter: blur(2px);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Medical conditions and allergies styling */
+.medical-conditions,
+.allergies {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+  width: 650px;
+  margin: 0 auto;
+}
+
+.condition-item,
+.allergy-item,
+.experience-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 1.5rem;
+  border-radius: 0.8rem;
+  margin-bottom: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(2px);
+}
+
+.condition-item span,
+.allergy-item span,
+.experience-item span {
+  font-weight: 600;
+  color: #eaf6fb;
+}
+
+.condition-item button,
+.allergy-item button,
+.experience-item button {
+  background: rgba(220, 53, 69, 0.8);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.condition-item button:hover,
+.allergy-item button:hover,
+.experience-item button:hover {
+  background: rgba(220, 53, 69, 1);
+  transform: translateY(-1px);
+}
+
+.add-condition,
+.add-allergy,
+.add-experience {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0.8rem;
+  align-items: end;
+  margin-top: 1rem;
+  width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.add-experience {
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
+}
+
+.add-condition input,
+.add-allergy input,
+.add-experience input,
+.add-condition select,
+.add-allergy select {
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  width: 100%;
+  height: 3rem;
+}
+
+.add-condition button,
+.add-allergy button,
+.add-experience button {
+  background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.add-condition button:hover,
+.add-allergy button:hover,
+.add-experience button:hover {
+  background: linear-gradient(90deg, #20c997 0%, #28a745 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(40, 167, 69, 0.4);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .profile-root {
+    min-height: calc(100vh - 70px);
+    height: auto;
+    padding: 0;
+    top: 70px;
+  }
+  
+  .profile-box {
+    padding: 1.5rem;
+    margin: 1.5rem 0 1.5rem 0;
+    max-width: 100%;
+    min-height: calc(100vh - 110px);
+  }
+  
+  .profile-title {
+    font-size: 1.8rem;
+  }
+  
+  .profile-form input,
+  .profile-form select {
+    width: 550px;
+    height: 3.5rem;
+    font-size: 1rem;
+    padding: 1.1rem 1.6rem;
+  }
+  
+  .input-group input,
+  .input-group select {
+    width: 550px;
+    height: 3.5rem;
+    font-size: 1rem;
+    padding: 1.1rem 1.6rem;
+  }
+  
+  .address-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    width: 550px;
+  }
+  
+  .address-grid .input-group input,
+  .address-grid .input-group select {
+    height: 3.5rem;
+    padding: 1.1rem 1.6rem;
+  }
+  
+  .medical-conditions,
+  .allergies {
+    width: 550px;
+  }
+  
+  .add-condition,
+  .add-allergy,
+  .add-experience {
+    width: 550px;
+  }
+  
+  .add-condition,
+  .add-allergy {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+  
+  .add-experience {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+  
+  .profile-actions {
+    flex-direction: column;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-root {
+    padding: 0;
+    min-height: calc(100vh - 60px);
+    height: auto;
+    top: 60px;
+  }
+  
+  .profile-box {
+    padding: 1rem;
+    margin: 1rem 0 1rem 0;
+    min-height: calc(100vh - 100px);
+  }
+  
+  .profile-title {
+    font-size: 1.6rem;
+  }
+  
+  .profile-step h3 {
+    font-size: 1.4rem;
+  }
+  
+  .profile-form input,
+  .profile-form select {
+    width: 450px;
+    height: 3.2rem;
+    font-size: 0.95rem;
+    padding: 1rem 1.4rem;
+  }
+  
+  .input-group input,
+  .input-group select {
+    width: 450px;
+    height: 3.2rem;
+    font-size: 0.95rem;
+    padding: 1rem 1.4rem;
+  }
+  
+  .address-grid {
+    gap: 0.6rem;
+    width: 450px;
+  }
+  
+  .address-grid .input-group input,
+  .address-grid .input-group select {
+    height: 3.2rem;
+    padding: 1rem 1.4rem;
+  }
+  
+  .medical-conditions,
+  .allergies {
+    width: 450px;
+  }
+  
+  .add-condition,
+  .add-allergy,
+  .add-experience {
+    width: 450px;
+  }
 } 

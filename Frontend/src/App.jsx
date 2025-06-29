@@ -1,66 +1,182 @@
 import './App.css';
 import shirt from './assets/shirt (1).png';
 import qrCode from './assets/qr-code.png';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
 import UserProfile from './components/UserProfile';
 import Marathons from './components/Marathons';
 import ContactUs from './components/ContactUs';
 import RegisterMarathon from './components/RegisterMarathon';
+import LoadingSpinner from './components/LoadingSpinner';
+import { useAuth } from './contexts/AuthContext';
+import ProfileView from './components/ProfileView';
 
 function App() {
+  const { user, logout, profileStatus, needsProfileCompletion, loading } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [userRole, setUserRole] = useState(null); // 'participant' or 'organiser'
+  const [showProfileView, setShowProfileView] = useState(false);
+  const [isCompletingProfile, setIsCompletingProfile] = useState(false);
   const [page, setPage] = useState('home'); // 'home', 'marathons', 'contact'
 
-  // Simulate login callback
-  const handleLogin = (role = 'participant') => {
-    setIsLoggedIn(true);
-    setUserRole(role);
+  // Temporary debugging
+  console.log('App render state:', {
+    user: user ? { id: user.id, name: user.name } : null,
+    profileStatus,
+    loading,
+    showLogin,
+    showProfile,
+    needsProfileCompletion: needsProfileCompletion()
+  });
+
+  // Check if profile completion is needed when user or profileStatus changes
+  useEffect(() => {
+    console.log('Profile completion check:', {
+      user: user ? { id: user.id, name: user.name } : null,
+      profileStatus,
+      loading,
+      needsProfileCompletion: needsProfileCompletion(),
+      isCompletingProfile
+    });
+    
+    // Only check profile completion if user is logged in, not loading, and not actively completing profile
+    if (user && !loading && !isCompletingProfile) {
+      // Check if user needs profile completion
+      const needsProfile = needsProfileCompletion();
+      
+      if (needsProfile) {
+        console.log('Setting showProfile to true - user needs profile completion');
+        setShowProfile(true);
+      } else {
+        console.log('Setting showProfile to false - profile is complete');
+        setShowProfile(false);
+      }
+    } else if (!user && !loading) {
+      console.log('No user, setting showProfile to false');
+      setShowProfile(false);
+    }
+  }, [user, profileStatus, loading, needsProfileCompletion, isCompletingProfile]);
+
+  // Show loading spinner while initializing auth
+  if (loading) {
+    return <LoadingSpinner message="Initializing..." />;
+  }
+
+  // Handle login success
+  const handleLogin = (role) => {
+    console.log('handleLogin called, setting showLogin to false');
     setShowLogin(false);
+    // Profile completion check is handled by useEffect above
   };
 
-  // Simulate logout
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserRole(null);
+  // Handle logout
+  const handleLogout = async () => {
+    await logout();
     setShowProfile(false);
     setPage('home');
   };
 
-  // Extract user profile info if logged in (dummy for now)
-  const userProfile = isLoggedIn && userRole === 'participant'
-    ? { name: 'John Doe', email: 'john@example.com', bib_number: 'BIB123' }
-    : null;
+  // Handle profile completion
+  const handleProfileComplete = () => {
+    setIsCompletingProfile(false);
+    setShowProfile(false);
+    setShowProfileView(true); // Show ProfileView after completion
+  };
+
+  // Handle profile start
+  const handleProfileStart = () => {
+    console.log('handleProfileStart called - starting profile completion');
+    setIsCompletingProfile(true);
+    setShowProfile(true);
+  };
+
+  // Handle profile icon click
+  const handleProfileIconClick = () => {
+    setShowProfileView(true);
+    setShowProfile(false);
+    setIsCompletingProfile(false);
+  };
+
+  // Extract user profile info if logged in
+  const userProfile = user ? { 
+    name: user.name, 
+    email: user.email, 
+    role: user.role,
+    profileStatus: profileStatus
+  } : null;
+
+  // Helper function to get first name
+  const getFirstName = (fullName) => {
+    return fullName ? fullName.split(' ')[0] : '';
+  };
 
   // Show login page (no navbar)
   if (showLogin) {
     return <Login onLogin={handleLogin} />;
   }
 
-  // Show user profile page
-  if (showProfile && isLoggedIn && userRole) {
-    return <>
-      <header className="navbar">
-        <div className="logo-title">🏃‍♂️ Marathon Master</div>
-        <nav>
-          <a href="#" className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}>Home</a>
-          <a href="#" className={page === 'marathons' ? 'active' : ''} onClick={() => setPage('marathons')}>Marathons</a>
-          <a href="#" className={page === 'contact' ? 'active' : ''} onClick={() => setPage('contact')}>Contact Us</a>
-          {!isLoggedIn ? (
-            <button className="login-btn" onClick={() => setShowLogin(true)}>Login</button>
-          ) : (
-            <>
-              <button className="login-btn" onClick={() => setShowProfile(true)}>Profile</button>
-              <button className="login-btn" onClick={handleLogout}>Logout</button>
-            </>
-          )}
-        </nav>
-      </header>
-      <UserProfile role={userRole} onSubmit={() => setShowProfile(false)} />
-    </>;
+  // Show ProfileView page
+  if (showProfileView && user) {
+    return (
+      <>
+        <header className="navbar">
+          <div className="logo-title">🏃‍♂️ Marathon Master</div>
+          <nav>
+            <a href="#" className={page === 'home' ? 'active' : ''} onClick={() => { setShowProfileView(false); setPage('home'); }}>Home</a>
+            <a href="#" className={page === 'marathons' ? 'active' : ''} onClick={() => { setShowProfileView(false); setPage('marathons'); }}>Marathons</a>
+            <a href="#" className={page === 'contact' ? 'active' : ''} onClick={() => { setShowProfileView(false); setPage('contact'); }}>Contact Us</a>
+            <div className="user-section">
+              <span className="user-info">
+                Welcome, {getFirstName(user.name)}!
+              </span>
+              <button 
+                className="profile-icon-btn" 
+                onClick={handleProfileIconClick}
+                title="View Profile"
+              >
+                👤
+              </button>
+              <button className="logout-btn" onClick={handleLogout} title="Logout">
+                Logout
+              </button>
+            </div>
+          </nav>
+        </header>
+        <ProfileView />
+      </>
+    );
+  }
+
+  // Show user profile page if profile completion is needed
+  if (showProfile && user) {
+    return (
+      <>
+        <header className="navbar">
+          <div className="logo-title">🏃‍♂️ Marathon Master</div>
+          <nav>
+            <a href="#" className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}>Home</a>
+            <a href="#" className={page === 'marathons' ? 'active' : ''} onClick={() => setPage('marathons')}>Marathons</a>
+            <a href="#" className={page === 'contact' ? 'active' : ''} onClick={() => setPage('contact')}>Contact Us</a>
+            <div className="user-section">
+              <span className="user-info">
+                Welcome, {getFirstName(user.name)}!
+              </span>
+              <button 
+                className="profile-icon-btn" 
+                onClick={handleProfileIconClick}
+                title="View Profile"
+              >
+                👤
+              </button>
+              <button className="logout-btn" onClick={handleLogout} title="Logout">
+                Logout
+              </button>
+            </div>
+          </nav>
+        </header>
+        <UserProfile role={user.role} onSubmit={handleProfileComplete} onStart={handleProfileStart} />
+      </>
+    );
   }
 
   // Main app with navbar always visible
@@ -75,7 +191,7 @@ function App() {
         <section className="hero hero-landing">
           <div className="hero-bg" />
           <div className="hero-center-content">
-            <h1 className="hero-title">Complete Bib Management & QR-based Attendance System</h1>
+            <h1 className="hero-title">Marathon Bib Management & QR-based Attendance System</h1>
           </div>
           <div className="hero-below-content">
             <p className="hero-desc">Empowering Marathons with seamless registration, real-time tracking, and instant attendance using QR codes.</p>
@@ -129,13 +245,26 @@ function App() {
           <a href="#" className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}>Home</a>
           <a href="#" className={page === 'marathons' ? 'active' : ''} onClick={() => setPage('marathons')}>Marathons</a>
           <a href="#" className={page === 'contact' ? 'active' : ''} onClick={() => setPage('contact')}>Contact Us</a>
-          {!isLoggedIn ? (
-            <button className="login-btn" onClick={() => setShowLogin(true)}>Login</button>
+          {!user ? (
+            <button className="login-btn" onClick={() => {
+              setShowLogin(true);
+            }}>Login</button>
           ) : (
-            <>
-              <button className="login-btn" onClick={() => setShowProfile(true)}>Profile</button>
-              <button className="login-btn" onClick={handleLogout}>Logout</button>
-            </>
+            <div className="user-section">
+              <span className="user-info">
+                Welcome, {getFirstName(user.name)}!
+              </span>
+              <button 
+                className="profile-icon-btn" 
+                onClick={handleProfileIconClick}
+                title="View Profile"
+              >
+                👤
+              </button>
+              <button className="logout-btn" onClick={handleLogout} title="Logout">
+                Logout
+              </button>
+            </div>
           )}
         </nav>
       </header>

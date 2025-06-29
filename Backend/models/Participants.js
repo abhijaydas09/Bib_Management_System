@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const participantSchema = new mongoose.Schema({
-  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizer' },
   event_name: { type: String, required: true, maxlength: 200 },
   category: { type: String, required: true, maxlength: 100 },
   bib_number: { type: String, required: true, maxlength: 20 },
@@ -10,7 +10,7 @@ const participantSchema = new mongoose.Schema({
 
   bib_assignments: [{
     assignment_id: { type: mongoose.Schema.Types.ObjectId },
-    staff_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    staff_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizer' },
     assigned_at: { type: Date },
     picked_up_at: { type: Date },
     device_info: { type: String },
@@ -19,7 +19,7 @@ const participantSchema = new mongoose.Schema({
 
   scan_logs: [{
     log_id: { type: mongoose.Schema.Types.ObjectId },
-    scanned_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    scanned_by: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizer' },
     scan_time: { type: Date },
     device_info: { type: String },
     location_info: { type: String }

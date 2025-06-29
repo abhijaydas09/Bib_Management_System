@@ -137,4 +137,15 @@
 }
 .switch-btn:hover {
   color: #fff;
+}
+
+.error-message {
+  color: #ff6b6b;
+  background-color: #ffe6e6;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid #ff6b6b;
 } 
