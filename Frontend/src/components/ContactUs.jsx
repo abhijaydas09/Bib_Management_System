@@ -9,12 +9,32 @@ function ContactUs() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch("http://localhost:5001/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
+
+    if (!response.ok) {
+      throw new Error("Something went wrong. Please try again.");
+    }
+
+    console.log(await response.json());
     setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 2500);
     setForm({ name: '', email: '', subject: '', message: '' });
-  };
+    setTimeout(() => setSubmitted(false), 2500);
+
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    alert("Failed to send message.");
+  }
+};
 
   return (
     <div className="contact-root">

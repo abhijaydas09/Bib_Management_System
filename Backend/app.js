@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 5001
 // Import routes
 const { router: authRouter } = require('./routes/auth');
 const profileRouter = require('./routes/profile');
+const contactRouter = require('./routes/contact');
 
 //middlewares
 app.use(express.json())
@@ -17,6 +18,9 @@ app.use(cors())
 // Routes
 app.use('/api/auth', authRouter);
 app.use('/api/profile', profileRouter);
+
+app.use('/api/contact', contactRouter);
+
 
 app.get('/' , (req,res)=>{
     res.send('Hello world')
