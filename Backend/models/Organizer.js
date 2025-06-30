@@ -8,6 +8,21 @@ const organizerSchema = new mongoose.Schema({
   email: { type: String, required: true },
   name: { type: String, required: true },
 
+  // Organiser profile fields
+  org_description: { type: String },
+  phone: { type: String },
+  website: { type: String },
+  social_links: {
+    facebook: { type: String },
+    instagram: { type: String },
+    linkedin: { type: String },
+    twitter: { type: String }
+  },
+  address: { type: String },
+  logo_url: { type: String },
+  org_type: { type: String, enum: ['company', 'non-profit', 'club', 'individual', 'other'] },
+  public_profile_link: { type: String },
+
   admin_info: {
     admin_privileges: { type: String },
     dashboard_access: { type: Boolean, default: false }

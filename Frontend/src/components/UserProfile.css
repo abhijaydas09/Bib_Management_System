@@ -11,11 +11,9 @@
   padding: 0;
   margin: 0;
   font-family: 'Poppins', 'Inter', 'Segoe UI', Arial, sans-serif;
-  position: relative;
-  top: 80px;
   left: 0;
   overflow-y: auto;
-  margin-top: 400px;
+  margin-top: 0;
 }
 
 .profile-box {
@@ -28,7 +26,7 @@
   position: relative;
   border: 1.5px solid #3e7cb133;
   backdrop-filter: blur(12px);
-  margin: 2rem 0 2rem 0;
+  margin: 1rem 0 1rem 0;
   min-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
@@ -416,12 +414,12 @@
     min-height: calc(100vh - 70px);
     height: auto;
     padding: 0;
-    top: 70px;
+    margin-top: 0;
   }
   
   .profile-box {
     padding: 1.5rem;
-    margin: 1.5rem 0 1.5rem 0;
+    margin: 0.5rem 0 0.5rem 0;
     max-width: 100%;
     min-height: calc(100vh - 110px);
   }
@@ -495,12 +493,12 @@
     padding: 0;
     min-height: calc(100vh - 60px);
     height: auto;
-    top: 60px;
+    margin-top: 0;
   }
   
   .profile-box {
     padding: 1rem;
-    margin: 1rem 0 1rem 0;
+    margin: 0.2rem 0 0.2rem 0;
     min-height: calc(100vh - 100px);
   }
   

@@ -152,6 +152,16 @@ class AuthService {
       throw error.response?.data || { error: 'Failed to update profile section' };
     }
   }
+
+  // Get organiser profile
+  async getOrganizerProfile() {
+    try {
+      const response = await api.get('/auth/profile');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { error: 'Failed to get organiser profile' };
+    }
+  }
 }
 
 export default new AuthService(); 

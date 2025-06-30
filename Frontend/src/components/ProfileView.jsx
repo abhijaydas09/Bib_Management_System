@@ -10,20 +10,29 @@ import authService from '../services/authService';
 const ProfileView = () => {
   const { user, updateProfileStatus } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [orgProfile, setOrgProfile] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [activeSection, setActiveSection] = useState('overview');
+  const [logoPreview, setLogoPreview] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
       try {
-        const response = await authService.getProfile();
-        setProfile(response.profile || response);
-        setForm(response.profile || response);
+        if (user?.role !== 'user') {
+          // Fetch organiser profile
+          const response = await authService.getOrganizerProfile();
+          setOrgProfile(response.organizer);
+        } else {
+          // Fetch participant profile
+          const response = await authService.getProfile();
+          setProfile(response.profile || response);
+          setForm(response.profile || response);
+        }
       } catch (err) {
         setError('Failed to load profile.');
       } finally {
@@ -31,7 +40,7 @@ const ProfileView = () => {
       }
     };
     fetchProfile();
-  }, []);
+  }, [user]);
 
   // Calculate age from DOB
   const getAge = (dob) => {
@@ -132,6 +141,78 @@ const ProfileView = () => {
     }
   };
 
+  // Save handler
+  const handleOrgSave = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setError('');
+    let missing = [];
+    if (!form.name) missing.push('Organisation/Organiser Name');
+    if (!form.org_description) missing.push('Description');
+    if (!form.email) missing.push('Email');
+    if (!form.phone) missing.push('Phone');
+    if (!form.address) missing.push('Address');
+    if (!form.org_type) missing.push('Type');
+    if (missing.length > 0) {
+      setError('Please fill all required fields: ' + missing.join(', '));
+      setSaving(false);
+      return;
+    }
+    let logo_url = form.logo_url;
+    if (logoPreview && logoPreview.startsWith('data:')) {
+      logo_url = logoPreview;
+    }
+    try {
+      const body = JSON.stringify({
+        org_name: form.name,
+        org_description: form.org_description,
+        email: form.email,
+        phone: form.phone,
+        website: form.website,
+        social_links: form.social_links,
+        address: form.address,
+        logo_url,
+        org_type: form.org_type
+      });
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      };
+      const response = await fetch('http://localhost:5001/api/profile', {
+        method: 'POST',
+        headers,
+        body,
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save profile');
+      }
+      const result = await response.json();
+      setOrgProfile(result.organiser);
+      setEditMode(false);
+      setError('');
+      setLogoPreview(null);
+      await updateProfileStatus();
+    } catch (err) {
+      setError(err.message || 'Failed to update profile.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Handle logo file change
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result);
+        setForm(f => ({ ...f, logo_url: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -154,11 +235,184 @@ const ProfileView = () => {
     );
   }
 
+  if (user?.role !== 'user' && orgProfile) {
+    // Inline edit mode for organiser
+    const renderOrgValue = (label, value, field, type = 'text', required = false) =>
+      editMode ? (
+        <input
+          type={type}
+          name={field}
+          placeholder={label + (required ? ' *' : '')}
+          value={form[field] || ''}
+          onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
+          required={required}
+          className="profile-form-input"
+          style={{ padding: '1.2rem 1.8rem', border: '1.5px solid #3e7cb133', borderRadius: '1rem', fontSize: '1.1rem', fontFamily: 'inherit', background: 'rgba(255,255,255,0.1)', color: '#fff', width: '100%', minHeight: '3.8rem', boxSizing: 'border-box', marginBottom: 0 }}
+        />
+      ) : (
+        <div className="info-value">{value || 'Not provided'}</div>
+      );
+    const renderOrgTextarea = (label, value, field, required = false) =>
+      editMode ? (
+        <textarea
+          name={field}
+          placeholder={label + (required ? ' *' : '')}
+          value={form[field] || ''}
+          onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
+          required={required}
+          className="profile-form-input"
+          style={{ padding: '1.2rem 1.8rem', border: '1.5px solid #3e7cb133', borderRadius: '1rem', fontSize: '1.1rem', fontFamily: 'inherit', background: 'rgba(255,255,255,0.1)', color: '#fff', width: '100%', minHeight: '3.8rem', boxSizing: 'border-box', marginBottom: 0, resize: 'vertical' }}
+        />
+      ) : (
+        <div className="info-value">{value || 'Not provided'}</div>
+      );
+    const renderOrgSelect = (label, value, field, required = false) =>
+      editMode ? (
+        <select
+          name={field}
+          value={form[field] || ''}
+          onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
+          required={required}
+          className="profile-form-input"
+          style={{ padding: '1.2rem 1.8rem', border: '1.5px solid #3e7cb133', borderRadius: '1rem', fontSize: '1.1rem', fontFamily: 'inherit', background: 'rgba(255,255,255,0.1)', color: '#fff', width: '100%', minHeight: '3.8rem', boxSizing: 'border-box', marginBottom: 0 }}
+        >
+          <option value="">Select Organisation/Organiser Type *</option>
+          <option value="company">Company</option>
+          <option value="non-profit">Non-profit</option>
+          <option value="club">Club</option>
+          <option value="individual">Individual</option>
+          <option value="other">Other</option>
+        </select>
+      ) : (
+        <div className="info-value">{value || 'Not provided'}</div>
+      );
+    const renderOrgSocial = (label, value, field) =>
+      editMode ? (
+        <input
+          type="text"
+          name={field}
+          placeholder={label}
+          value={form.social_links?.[field] || ''}
+          onChange={e => setForm(f => ({ ...f, social_links: { ...f.social_links, [field]: e.target.value } }))}
+          className="profile-form-input"
+          style={{ padding: '1.2rem 1.8rem', border: '1.5px solid #3e7cb133', borderRadius: '1rem', fontSize: '1.1rem', fontFamily: 'inherit', background: 'rgba(255,255,255,0.1)', color: '#fff', width: '100%', minHeight: '3.8rem', boxSizing: 'border-box', marginBottom: 0 }}
+        />
+      ) : (
+        value ? (<a href={value} target="_blank" rel="noopener noreferrer">{value}</a>) : 'Not provided'
+      );
+    return (
+      <div className="profile-view-root">
+        <div className="profile-view-box">
+          <h2 className="profile-title">Organiser Profile</h2>
+          <div className="profile-logo" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+            {editMode ? (
+              logoPreview ? (
+                <img src={logoPreview} alt="Logo Preview" style={{ maxWidth: 120, maxHeight: 120, borderRadius: '1rem', background: '#fff', padding: 8, margin: '0 auto', display: 'block' }} />
+              ) : form.logo_url ? (
+                <img src={form.logo_url} alt="Logo" style={{ maxWidth: 120, maxHeight: 120, borderRadius: '1rem', background: '#fff', padding: 8, margin: '0 auto', display: 'block' }} />
+              ) : (
+                <div style={{ width: 120, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '1rem', background: '#fff', fontSize: 64, color: '#3e7cb1', margin: '0 auto', boxShadow: '0 2px 12px #3e7cb133' }}>
+                  <span role="img" aria-label="Org">🏢</span>
+                </div>
+              )
+            ) : (
+              orgProfile.logo_url ? (
+                <img src={orgProfile.logo_url} alt="Logo" style={{ maxWidth: 120, maxHeight: 120, borderRadius: '1rem', background: '#fff', padding: 8 }} />
+              ) : (
+                <div style={{ width: 120, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '1rem', background: '#fff', fontSize: 64, color: '#3e7cb1', margin: '0 auto', boxShadow: '0 2px 12px #3e7cb133' }}>
+                  <span role="img" aria-label="Org">🏢</span>
+                </div>
+              )
+            )}
+            {editMode && (
+              <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <input type="file" accept="image/*" onChange={handleLogoChange} style={{ display: 'block', margin: '0 auto' }} />
+                <div style={{ color: '#b0c4de', fontSize: 13, marginTop: 4, textAlign: 'center' }}>(Optional) Upload logo image</div>
+              </div>
+            )}
+          </div>
+          <form onSubmit={handleOrgSave}>
+            <div className="info-card">
+              <h3 className="card-title">Organisation/Organiser Details</h3>
+              <div className="info-grid">
+                <div className="info-item">
+                  <div className="info-label">Name</div>
+                  {renderOrgValue('Organisation/Organiser Name', orgProfile.name, 'name', 'text', true)}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Type</div>
+                  {renderOrgSelect('Type', orgProfile.org_type, 'org_type', true)}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Description</div>
+                  {renderOrgTextarea('Profile/Organisation Description', orgProfile.org_description, 'org_description', true)}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Email</div>
+                  {renderOrgValue('Email', orgProfile.email, 'email', 'email', true)}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Phone</div>
+                  {renderOrgValue('Phone', orgProfile.phone, 'phone', 'tel', true)}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Website</div>
+                  {renderOrgValue('Website', orgProfile.website, 'website', 'text', false)}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Address</div>
+                  {renderOrgValue('Address', orgProfile.address, 'address', 'text', true)}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Public Profile Link</div>
+                  <div className="info-value">{orgProfile.public_profile_link ? (<a href={orgProfile.public_profile_link} target="_blank" rel="noopener noreferrer">{orgProfile.public_profile_link}</a>) : 'Not provided'}</div>
+                </div>
+              </div>
+            </div>
+            <div className="info-card">
+              <h3 className="card-title">Social Links</h3>
+              <div className="info-grid">
+                <div className="info-item">
+                  <div className="info-label">Facebook</div>
+                  {renderOrgSocial('Facebook', orgProfile.social_links?.facebook, 'facebook')}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Instagram</div>
+                  {renderOrgSocial('Instagram', orgProfile.social_links?.instagram, 'instagram')}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">LinkedIn</div>
+                  {renderOrgSocial('LinkedIn', orgProfile.social_links?.linkedin, 'linkedin')}
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Twitter</div>
+                  {renderOrgSocial('Twitter', orgProfile.social_links?.twitter, 'twitter')}
+                </div>
+              </div>
+            </div>
+            {editMode && (
+              <div className="profile-actions" style={{ marginTop: 24 }}>
+                <button type="button" className="btn-secondary" onClick={() => { setEditMode(false); setForm(orgProfile); }}>Cancel</button>
+                <button type="submit" className="btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</button>
+              </div>
+            )}
+            {error && <div className="error-message">{error}</div>}
+          </form>
+          {!editMode && (
+            <div className="profile-actions" style={{ marginTop: 24 }}>
+              <button className="btn-primary" onClick={() => { setEditMode(true); setForm(orgProfile); }}>Edit Profile</button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (!profile && !editMode) {
     return (
       <div className="no-profile-container">
         <div className="no-profile-content">
-          <div className="no-profile-icon">📋</div>
+          <div className="no-profile-icon">��</div>
           No profile found.
         </div>
       </div>

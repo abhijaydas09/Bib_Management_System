@@ -18,6 +18,7 @@ function App() {
   const [showProfileView, setShowProfileView] = useState(false);
   const [isCompletingProfile, setIsCompletingProfile] = useState(false);
   const [page, setPage] = useState('home'); // 'home', 'marathons', 'contact'
+  const [justSignedUp, setJustSignedUp] = useState(false);
 
   // Temporary debugging
   console.log('App render state:', {
@@ -28,34 +29,6 @@ function App() {
     showProfile,
     needsProfileCompletion: needsProfileCompletion()
   });
-
-  // Check if profile completion is needed when user or profileStatus changes
-  useEffect(() => {
-    console.log('Profile completion check:', {
-      user: user ? { id: user.id, name: user.name } : null,
-      profileStatus,
-      loading,
-      needsProfileCompletion: needsProfileCompletion(),
-      isCompletingProfile
-    });
-    
-    // Only check profile completion if user is logged in, not loading, and not actively completing profile
-    if (user && !loading && !isCompletingProfile) {
-      // Check if user needs profile completion
-      const needsProfile = needsProfileCompletion();
-      
-      if (needsProfile) {
-        console.log('Setting showProfile to true - user needs profile completion');
-        setShowProfile(true);
-      } else {
-        console.log('Setting showProfile to false - profile is complete');
-        setShowProfile(false);
-      }
-    } else if (!user && !loading) {
-      console.log('No user, setting showProfile to false');
-      setShowProfile(false);
-    }
-  }, [user, profileStatus, loading, needsProfileCompletion, isCompletingProfile]);
 
   // Show loading spinner while initializing auth
   if (loading) {
@@ -69,18 +42,27 @@ function App() {
     // Profile completion check is handled by useEffect above
   };
 
+  // Handle signup success
+  const handleSignup = () => {
+    setJustSignedUp(true);
+    setShowProfile(true);
+  };
+
   // Handle logout
   const handleLogout = async () => {
     await logout();
     setShowProfile(false);
     setPage('home');
+    setJustSignedUp(false);
   };
 
   // Handle profile completion
   const handleProfileComplete = () => {
     setIsCompletingProfile(false);
     setShowProfile(false);
-    setShowProfileView(true); // Show ProfileView after completion
+    setShowProfileView(false);
+    setPage('home'); // Go to landing page after completion
+    setJustSignedUp(false);
   };
 
   // Handle profile start
@@ -147,14 +129,14 @@ function App() {
     );
   }
 
-  // Show user profile page if profile completion is needed
-  if (showProfile && user) {
+  // Show user profile page ONLY if just signed up
+  if (showProfile && user && justSignedUp) {
     return (
       <>
         <header className="navbar">
           <div className="logo-title">🏃‍♂️ Marathon Master</div>
           <nav>
-            <a href="#" className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}>Home</a>
+            <a href="#" className={page === 'home' ? 'active' : ''} onClick={() => { setShowProfileView(false); setPage('home'); }}>Home</a>
             <a href="#" className={page === 'marathons' ? 'active' : ''} onClick={() => setPage('marathons')}>Marathons</a>
             <a href="#" className={page === 'contact' ? 'active' : ''} onClick={() => setPage('contact')}>Contact Us</a>
             <div className="user-section">

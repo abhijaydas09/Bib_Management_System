@@ -30,12 +30,61 @@ router.get('/', authenticateToken, async (req, res) => {
 // Create or update user profile
 router.post('/', authenticateToken, async (req, res) => {
   try {
+    if (req.user.role !== 'user') {
+      // Organiser profile completion logic
+      const {
+        org_name,
+        org_description,
+        email,
+        phone,
+        website,
+        social_links = {},
+        address,
+        logo_url,
+        org_type
+      } = req.body;
+
+      // Validate required organiser fields
+      let missing = [];
+      if (!org_name) missing.push('Organisation/Organiser Name');
+      if (!org_description) missing.push('Description');
+      if (!email) missing.push('Email');
+      if (!phone) missing.push('Phone');
+      if (!address) missing.push('Address');
+      if (!org_type) missing.push('Type');
+      if (missing.length > 0) {
+        return res.status(400).json({ error: 'Please fill all required fields: ' + missing.join(', ') });
+      }
+      if (!validator.isEmail(email)) {
+        return res.status(400).json({ error: 'Invalid email format' });
+      }
+      // Update organiser profile fields
+      const update = {
+        name: org_name,
+        org_description,
+        email,
+        phone,
+        website,
+        social_links,
+        address,
+        logo_url,
+        org_type,
+        public_profile_link: `https://marathonmaster.com/organiser/${req.user.username || req.user.id}`
+      };
+      const organiser = await Organizer.findByIdAndUpdate(req.user.id, update, { new: true });
+      if (!organiser) {
+        return res.status(404).json({ error: 'Organiser not found' });
+      }
+      return res.json({
+        message: 'Organiser profile updated successfully',
+        organiser
+      });
+    }
     const {
       full_name,
       gender,
       date_of_birth,
       nationality,
-      email,
       mobile_number,
       mailing_address,
       emergency_contact,
@@ -45,16 +94,11 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // Validation
     if (!full_name || !gender || !date_of_birth || !nationality || 
-        !email || !mobile_number || !mailing_address || !emergency_contact || !t_shirt_size) {
+        !mobile_number || !mailing_address || !emergency_contact || !t_shirt_size) {
       return res.status(400).json({ 
         error: 'Required fields missing',
-        required_fields: ['full_name', 'gender', 'date_of_birth', 'nationality', 'email', 'mobile_number', 'mailing_address', 'emergency_contact', 't_shirt_size']
+        required_fields: ['full_name', 'gender', 'date_of_birth', 'nationality', 'mobile_number', 'mailing_address', 'emergency_contact', 't_shirt_size']
       });
-    }
-
-    // Validate email
-    if (!validator.isEmail(email)) {
-      return res.status(400).json({ error: 'Invalid email format' });
     }
 
     // Validate date of birth (must be in the past and reasonable age)
@@ -97,7 +141,6 @@ router.post('/', authenticateToken, async (req, res) => {
         gender,
         date_of_birth: dob,
         nationality,
-        email,
         mobile_number,
         mailing_address,
         emergency_contact,
@@ -112,7 +155,6 @@ router.post('/', authenticateToken, async (req, res) => {
         gender,
         date_of_birth: dob,
         nationality,
-        email,
         mobile_number,
         mailing_address,
         emergency_contact,
@@ -126,11 +168,6 @@ router.post('/', authenticateToken, async (req, res) => {
     profile.is_profile_complete = profile.profile_completion_percentage >= 80;
 
     await profile.save();
-
-    // Update organizer email if different
-    if (email !== req.user.email) {
-      await Organizer.findByIdAndUpdate(req.user.id, { email });
-    }
 
     res.json({
       message: profile.is_profile_complete ? 'Profile completed successfully' : 'Profile updated successfully',
@@ -167,7 +204,6 @@ router.patch('/section/:section', authenticateToken, async (req, res) => {
         break;
 
       case 'contact':
-        if (updateData.email) profile.email = updateData.email;
         if (updateData.mobile_number) profile.mobile_number = updateData.mobile_number;
         if (updateData.mailing_address) profile.mailing_address = updateData.mailing_address;
         break;
@@ -214,7 +250,7 @@ router.get('/completion-status', authenticateToken, async (req, res) => {
         has_profile: false,
         completion_percentage: 0,
         is_complete: false,
-        missing_fields: ['full_name', 'gender', 'date_of_birth', 'nationality', 'email', 'mobile_number', 'mailing_address', 'emergency_contact', 't_shirt_size']
+        missing_fields: ['full_name', 'gender', 'date_of_birth', 'nationality', 'mobile_number', 'mailing_address', 'emergency_contact', 't_shirt_size']
       });
     }
 
