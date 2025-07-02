@@ -1,0 +1,64 @@
+.otpinput-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-02, 4px);
+  margin-bottom: var(--spacing-06, 24px);
+}
+
+.otpinput-label {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 700;
+  margin-bottom: 2px;
+  text-align: left;
+}
+
+.otpinput-boxes {
+  display: flex;
+  gap: var(--spacing-04, 12px);
+  margin: 8px 0 4px 0;
+}
+
+.otpinput-box {
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: #232b32;
+  border: none;
+  border-radius: 6px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  box-shadow: none;
+}
+
+[data-theme="dark"] .otpinput-box {
+  background: #232b32;
+  color: var(--color-text-muted);
+}
+
+.otpinput-box:focus {
+  background: var(--color-primary);
+  color: #fff;
+  border: 2px solid var(--color-primary);
+}
+
+[data-theme="dark"] .otpinput-box:focus {
+  background: var(--color-primary);
+  color: #fff;
+  border: 2px solid var(--color-primary);
+}
+
+.otpinput-help {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  font-family: 'Lexend', Arial, sans-serif;
+  font-style: italic;
+  margin-top: 2px;
+  text-align: left;
+} 

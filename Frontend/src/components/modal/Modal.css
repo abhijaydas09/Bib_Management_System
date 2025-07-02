@@ -1,0 +1,223 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 58, 77, 0.48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-root {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(42, 58, 77, 0.24);
+  min-width: 340px;
+  max-width: 420px;
+  width: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family, 'Lexend', sans-serif);
+}
+
+[data-theme="dark"] .modal-root {
+  background: #2a3a4d;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.32);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1.5rem 0.25rem 1.5rem;
+  position: relative;
+}
+
+.modal-leading {
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.3em;
+  color: #000;
+}
+[data-theme="dark"] .modal-leading {
+  color: inherit;
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 auto;
+  position: relative;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2a3a4d;
+  display: inline-block;
+}
+[data-theme="dark"] .modal-title {
+  color: #fff;
+}
+
+.modal-counter {
+  background: #eaf0f6;
+  color: #2a3a4d;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 0 0.5em;
+  min-width: 2em;
+  text-align: center;
+  margin-left: 0.25rem;
+}
+[data-theme="dark"] .modal-counter {
+  background: #3a4663;
+  color: #fff;
+}
+
+.modal-label {
+  background: #b6ff4a;
+  color: #0a3556;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.1em 0.75em;
+  margin-left: 0.5rem;
+}
+[data-theme="dark"] .modal-label {
+  background: #7fff4f;
+  color: #232f3e;
+}
+
+.modal-trailing {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: #8fa2b7;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: background 0.15s;
+}
+.modal-close:hover {
+  background: #eaf0f6;
+}
+[data-theme="dark"] .modal-close {
+  color: #8fa2b7;
+}
+[data-theme="dark"] .modal-close:hover {
+  background: #3a4663;
+}
+
+.modal-divider {
+  border: none;
+  border-top: 1.5px solid #eaf0f6;
+  margin: 0 0 0 0;
+}
+[data-theme="dark"] .modal-divider {
+  border-top: 1.5px solid #3a4663;
+}
+
+.modal-subtitle {
+  color: #8fa2b7;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0 1.5rem 0.5rem 1.5rem;
+  margin-top: -0.25rem;
+  margin-bottom: 0.25rem;
+  text-align: left;
+  margin-left: calc(1.5rem + 1.3em + 0.5rem);
+}
+[data-theme="dark"] .modal-subtitle {
+  color: #8fa2b7;
+}
+@media (max-width: 480px) {
+  .modal-subtitle {
+    margin-left: calc(1.1rem + 1.3em + 0.5rem);
+  }
+}
+
+.modal-body-outer {
+  padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-body-box {
+  width: 100%;
+  min-height: 60px;
+  border-radius: 8px;
+  border: 1.5px dashed #b6aaff;
+  background: rgba(182,170,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b6aaff;
+  font-size: 1rem;
+}
+[data-theme="dark"] .modal-body-box {
+  border-color: #b86cff;
+  background: #353f5b;
+  color: #b86cff;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1rem 1.5rem 1.25rem 1.5rem;
+  background: none;
+}
+
+.modal-btn {
+  min-width: 110px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.modal-btn-secondary {
+  background: #eaf0f6;
+  color: #2a3a4d;
+}
+.modal-btn-secondary:hover {
+  background: #d2e0f6;
+}
+[data-theme="dark"] .modal-btn-secondary {
+  background: #3a4663;
+  color: #fff;
+}
+[data-theme="dark"] .modal-btn-secondary:hover {
+  background: #4a5680;
+}
+
+.modal-btn-primary {
+  background: #0a3556;
+  color: #fff;
+}
+.modal-btn-primary:hover {
+  background: #174a7c;
+}
+[data-theme="dark"] .modal-btn-primary {
+  background: #c6ff1a;
+  color: #232f3e;
+}
+[data-theme="dark"] .modal-btn-primary:hover {
+  background: #e0ff7a;
+} 

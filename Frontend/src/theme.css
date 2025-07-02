@@ -1,0 +1,103 @@
+:root {
+  --color-primary: #0B405B;
+  --color-secondary-1: #94D82A;
+  --color-secondary-2: #109960;
+  --color-neutral: #F7F7F7;
+  --color-text-primary: #000000;
+  --color-text-muted: #676767;
+  --color-error: #FF5340;
+  --color-success: #00C26B;
+  --color-warning: #FF5340;
+  --color-border: #B3AC9B;
+  /* Extended Brand Color Palette */
+  --palette-blue: #0B405B;
+  --palette-neon-green: #94D82A;
+  --palette-green: #1cb579;
+  --palette-yellow: #ece948;
+  --palette-mushroom: #d2ccb6;
+  --palette-light-green: #65c296;
+  --palette-light-yellow: #f6ef7e;
+  --palette-dark-yellow: #eddb35;
+  --palette-light-mushroom: #e5e0cf;
+  --palette-dark-mushroom: #b3ac9b;
+  /* Spacing System: 4px base */
+  --spacing-01: 0.125rem; /* 2px */
+  --spacing-02: 0.25rem;  /* 4px */
+  --spacing-03: 0.5rem;   /* 8px */
+  --spacing-04: 0.75rem;  /* 12px */
+  --spacing-05: 1rem;     /* 16px */
+  --spacing-06: 1.5rem;   /* 24px */
+  --spacing-07: 2rem;     /* 32px */
+  --spacing-08: 2.5rem;   /* 40px */
+  --spacing-09: 3rem;     /* 48px */
+  --spacing-10: 4rem;     /* 64px */
+  --spacing-11: 5rem;     /* 80px */
+  --spacing-12: 6rem;     /* 96px */
+  --spacing-13: 10rem;    /* 160px */
+
+  /* Layout System: Columns, Gutters, Margins */
+  /* Mobile */
+  --layout-mobile-width: 360px;
+  --layout-mobile-columns: 4;
+  --layout-mobile-gutter: 16px;
+  --layout-mobile-margin: 16px;
+
+  /* Tablet */
+  --layout-tablet-width: 768px;
+  --layout-tablet-columns: 8;
+  --layout-tablet-gutter: 16px;
+  --layout-tablet-margin: 24px;
+
+  /* Desktop */
+  --layout-desktop-width: 1280px;
+  --layout-desktop-columns: 12;
+  --layout-desktop-gutter: 16px;
+  --layout-desktop-margin: 24px;
+}
+
+[data-theme="dark"] {
+  --color-primary: #A8FD24;
+  --color-secondary-1: #D6F917;
+  --color-secondary-2: #ffffff;
+  --color-neutral: #1E1E1E;
+  --color-text-primary: #ffffff;
+  --color-text-muted: #B3B3B3;
+  --color-error: #ED1515;
+  --color-success: #00C26B;
+  --color-warning: #ED1515;
+  --color-border: #B3AC9B;
+  /* Extended Brand Color Palette */
+  --palette-blue: #000000;
+  --palette-neon-green: #A8FD24;
+  --palette-green: #A8FD24;
+  --palette-yellow: #E8FF55;
+  --palette-mushroom: #D2CCB6;
+  --palette-light-green: #BAE002;
+  --palette-light-yellow: #EFEFEF;
+  --palette-dark-yellow: #DCDCDC;
+  --palette-light-mushroom: #E5E0CF;
+  --palette-dark-mushroom: #B3AC9B;
+}
+
+/* Font Import and Typography System */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700&display=swap');
+
+body {
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 400;
+}
+
+.header {
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
+}
+
+.subheader {
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 700;
+}
+
+.body-copy {
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 400;
+} 

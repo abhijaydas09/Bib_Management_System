@@ -1,0 +1,76 @@
+.dropdowninput-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-02, 4px);
+  margin-bottom: var(--spacing-06, 24px);
+}
+
+.dropdowninput-label {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 400;
+  margin-bottom: 2px;
+  text-align: left;
+}
+
+.dropdowninput-field-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-neutral);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.dropdowninput-select {
+  width: 100%;
+  font-size: 1rem;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: var(--spacing-04, 12px) var(--spacing-10, 64px) var(--spacing-04, 12px) var(--spacing-04, 12px);
+  appearance: none;
+  cursor: pointer;
+}
+
+.dropdowninput-arrow {
+  position: absolute;
+  right: 16px;
+  pointer-events: none;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.dropdowninput-wrapper.active .dropdowninput-field-group,
+.dropdowninput-field-group:focus-within {
+  border-color: var(--color-primary);
+}
+
+.dropdowninput-wrapper.disabled .dropdowninput-field-group {
+  background: #444;
+  border-color: #666;
+}
+
+.dropdowninput-wrapper.disabled .dropdowninput-select {
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.dropdowninput-wrapper.error .dropdowninput-label,
+.dropdowninput-wrapper.error .dropdowninput-field-group {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.dropdowninput-error {
+  color: var(--color-error);
+  font-size: 0.9rem;
+  margin-top: 2px;
+  font-family: 'Lexend', Arial, sans-serif;
+  text-align: left;
+} 

@@ -1,0 +1,81 @@
+.phoneinput-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-02, 4px);
+  margin-bottom: var(--spacing-06, 24px);
+}
+
+.phoneinput-label {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 400;
+  margin-bottom: 2px;
+  text-align: left;
+}
+
+.phoneinput-field-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-neutral);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.phoneinput-country {
+  font-size: 1rem;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0 var(--spacing-03, 8px);
+  min-width: 56px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.phoneinput-input {
+  flex: 1;
+  font-size: 1rem;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: var(--spacing-04, 12px);
+}
+
+.phoneinput-wrapper.active .phoneinput-field-group,
+.phoneinput-field-group:focus-within {
+  border-color: var(--color-primary);
+}
+
+.phoneinput-wrapper.disabled .phoneinput-field-group {
+  background: #444;
+  border-color: #666;
+}
+
+.phoneinput-wrapper.disabled .phoneinput-country,
+.phoneinput-wrapper.disabled .phoneinput-input {
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.phoneinput-wrapper.error .phoneinput-label,
+.phoneinput-wrapper.error .phoneinput-field-group {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.phoneinput-error {
+  color: var(--color-error);
+  font-size: 0.9rem;
+  margin-top: 2px;
+  font-family: 'Lexend', Arial, sans-serif;
+  text-align: left;
+} 

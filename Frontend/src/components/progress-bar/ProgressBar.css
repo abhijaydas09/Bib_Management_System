@@ -1,0 +1,61 @@
+.progressbar-root {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  font-family: var(--font-family, 'Lexend', sans-serif);
+}
+
+.progressbar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 4px;
+}
+
+.progressbar-label, .progressbar-percent {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-secondary, #fff);
+}
+
+.progressbar-container {
+  position: relative;
+  height: 8px;
+  background: var(--color-progress-bg, #232f3e);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressbar-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--color-progress-fg, #b6ff4a);
+  border-radius: 2px;
+  transition: width 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+/* Light theme overrides */
+body.light .progressbar-label,
+body.light .progressbar-percent {
+  color: var(--color-text-primary-light, #2a3a4d);
+}
+body.light .progressbar-container {
+  background: var(--color-progress-bg-light, #eaf0f6);
+}
+body.light .progressbar-indicator {
+  background: var(--color-progress-fg-light, #0a3556);
+}
+
+/* Dark theme (default) */
+body.dark .progressbar-label,
+body.dark .progressbar-percent {
+  color: var(--color-text-primary-dark, #fff);
+}
+body.dark .progressbar-container {
+  background: var(--color-progress-bg-dark, #232f3e);
+}
+body.dark .progressbar-indicator {
+  background: var(--color-progress-fg-dark, #b6ff4a);
+} 
