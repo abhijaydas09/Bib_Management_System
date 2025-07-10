@@ -10,6 +10,6 @@ authRouter.post("/player_login",playerLogin)
 authRouter.post("/player_logout",playerlogout)
 authRouter.post("/organiser_login" , organiserLogin)
 authRouter.post("/organiser_signup",organiserSignup)
-authRouter.post("/organiser_logout ",organiserLogout )
+authRouter.post("/organiser_logout",organiserLogout)
 
 export default authRouter ;

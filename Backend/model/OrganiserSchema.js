@@ -42,6 +42,6 @@ const OrganiserSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const organiser = mongoose.model('Organiser', OrganiserSchema);
+const Organiser = mongoose.model('Organiser', OrganiserSchema);
 
-export default organiser;
+export default Organiser;
