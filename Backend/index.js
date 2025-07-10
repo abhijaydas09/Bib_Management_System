@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import {connect} from "mongoose";
-import connectDB from "./model/DatabaseConnectionDriver.js";
+import connectDB from "./config/db.js";
 
 dotenv.config()
 let port = process.env.PORT || 6000 ;
