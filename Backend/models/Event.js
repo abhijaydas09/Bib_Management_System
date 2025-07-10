@@ -7,21 +7,6 @@ const CategorySchema = new mongoose.Schema({
   registrationFees: { type: Number, required: true },
   minimumAge: { type: Number },
   maximumAge: { type: Number },
-  maximumParticipants: {
-    type: mongoose.Schema.Types.Mixed,
-    validate: {
-      validator: function(v) {
-        return (
-          typeof v === 'number' ||
-          v === 'NA' ||
-          v === 'Unlimited' ||
-          v === null
-        );
-      },
-      message: 'maximumParticipants must be a number, "NA", "Unlimited", or null.'
-    },
-    default: null
-  },
 });
 
 const BibCollectionSchema = new mongoose.Schema({

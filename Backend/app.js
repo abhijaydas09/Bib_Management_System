@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 5001
 const { router: authRouter } = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const contactRouter = require('./routes/contact');
+const eventCategoryRouter = require('./routes/eventCategory');
+
 
 //middlewares
 app.use(express.json())
@@ -20,7 +22,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/profile', profileRouter);
 
 app.use('/api/contact', contactRouter);
-
+app.use('/api/eventCategory', eventCategoryRouter);
 
 app.get('/' , (req,res)=>{
     res.send('Hello world')
