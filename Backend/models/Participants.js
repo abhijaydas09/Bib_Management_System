@@ -1,29 +1,31 @@
 const mongoose = require('mongoose');
+const AddressSchema = require('./Address');
+const EmergencyContactSchema = require('./EmergencyContact');
 
-const participantSchema = new mongoose.Schema({
-  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizer' },
-  event_name: { type: String, required: true, maxlength: 200 },
-  category: { type: String, required: true, maxlength: 100 },
-  bib_number: { type: String, required: true, maxlength: 20 },
-  qr_code: { type: String, maxlength: 500 },
-  registration_date: { type: Date, default: Date.now },
+const ParticipantSchema = new mongoose.Schema({
+  firstName: { type: String, required: true },
+  middleName: { type: String },
+  lastName: { type: String, required: true },
+  dateOfBirth: { type: Date },
+  gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
+  nationality: { type: String },
+  phoneNumber: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  profilePicture: { type: String }, // URL or file path
+  address: AddressSchema,
+  emergencyContacts: {
+    type: [EmergencyContactSchema],
+    validate: [arrayLimit, '{PATH} exceeds the limit of 2']
+  },
+  medicalConditions: { type: String },
+  allergies: { type: String },
+  currentMedications: { type: String },
+  bloodGroup: { type: String },
+}, { timestamps: true });
 
-  bib_assignments: [{
-    assignment_id: { type: mongoose.Schema.Types.ObjectId },
-    staff_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizer' },
-    assigned_at: { type: Date },
-    picked_up_at: { type: Date },
-    device_info: { type: String },
-    location_info: { type: String }
-  }],
+function arrayLimit(val) {
+  return val.length <= 2;
+}
 
-  scan_logs: [{
-    log_id: { type: mongoose.Schema.Types.ObjectId },
-    scanned_by: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizer' },
-    scan_time: { type: Date },
-    device_info: { type: String },
-    location_info: { type: String }
-  }]
-});
-
-module.exports = mongoose.model('Participant', participantSchema);
+module.exports = mongoose.model('Participant', ParticipantSchema); 

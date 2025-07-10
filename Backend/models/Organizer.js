@@ -1,37 +1,34 @@
 const mongoose = require('mongoose');
+const AddressSchema = require('./Address');
 
-const organizerSchema = new mongoose.Schema({
-  username: { type: String, required: true },
-  password_hash: { type: String, required: true },
-  role: { type: String, enum: ['admin', 'staff', 'user'], default: 'user' },
-  is_active: { type: Boolean, default: false },
-  email: { type: String, required: true },
-  name: { type: String, required: true },
-
-  // Organiser profile fields
-  org_description: { type: String },
-  phone: { type: String },
-  website: { type: String },
-  social_links: {
+const OrganizationProfileSchema = new mongoose.Schema({
+  organisationName: { type: String, required: true },
+  organisationType: { type: String },
+  organiserFirstName: { type: String, required: true },
+  organiserLastName: { type: String, required: true },
+  description: { type: String },
+  contact: {
+    email: { type: String },
+    phone: { type: String },
+    website: { type: String },
     facebook: { type: String },
     instagram: { type: String },
     linkedin: { type: String },
-    twitter: { type: String }
+    twitter: { type: String },
   },
-  address: { type: String },
-  logo_url: { type: String },
-  org_type: { type: String, enum: ['company', 'non-profit', 'club', 'individual', 'other'] },
-  public_profile_link: { type: String },
-
-  admin_info: {
-    admin_privileges: { type: String },
-    dashboard_access: { type: Boolean, default: false }
-  },
-
-  staff_info: {
-    scanner_access: { type: Boolean, default: false },
-    location_assigned: { type: String }
-  }
+  address: AddressSchema,
+  publicProfileLink: { type: String },
 });
 
-module.exports = mongoose.model('Organizer', organizerSchema); 
+const OrganizerSchema = new mongoose.Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
+  phoneNumber: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  profilePicture: { type: String }, // URL or file path
+  organizationProfile: OrganizationProfileSchema,
+}, { timestamps: true });
+
+module.exports = mongoose.model('Organizer', OrganizerSchema); 
