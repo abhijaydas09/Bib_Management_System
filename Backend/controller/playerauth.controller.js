@@ -48,9 +48,9 @@ export const playerLogin=async (req,res)=>{
             return res.status(400).json({ message: "User does not exist" });
         }
         
-        let isMatch = await bcrypt.compare(password , player.password)
+        let isPasswordValid = await bcrypt.compare(password , player.password)
 
-        if(!isMatch){
+        if(!isPasswordValid){
             return res.status(400).json({message:"incorrect password"})
         }
 
