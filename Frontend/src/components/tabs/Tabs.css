@@ -1,93 +1,97 @@
-.tabs-container {
+.navbar {
   display: flex;
   align-items: center;
-  gap: 0;
-  background: transparent;
-  border-radius: 10px;
-  padding: 0;
-  margin-bottom: 24px;
+  justify-content: flex-end; /* Align all navbar content to the right */
+  height: 66px;
+  width: 100vw;
+  background: var(--color-primary, #A8FD24);
+  color: #fff;
+  opacity: 1;
   border: none;
+  border-radius: 0;
+  padding: 0 32px 0 0;
+  margin: 0;
   position: relative;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400; /* Regular font weight */
+  box-sizing: border-box;
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  gap: 80px; /* Add 80px gap between each navbar item and icon */
+  margin-left: auto; /* Pushes the tabs and controls to the right */
+}
+
+.navbar-item {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400; /* Regular font weight */
+  cursor: pointer;
+  padding: 0;
+  height: 66px;
+  transition: color 0.18s;
+  outline: none;
+  box-shadow: none;
+  margin-right: 0; /* Default, will override for last tab */
+}
+
+.navbar-item.active {
+  color: #A8FD24;
+}
+
+.navbar-item:last-of-type {
+  margin-right: 80px; /* 80px gap between last tab and dark mode icon */
+}
+
+.navbar-item:focus,
+.navbar-item:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .tab-slider {
   position: absolute;
   bottom: 0;
   height: 3px;
-  background: var(--color-primary);
-  border-radius: 2px;
-  transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1);
-  z-index: 2;
+  background: #A8FD24;
+  transition: left 0.18s, width 0.18s;
+  /* left and width are set inline by JS, but we want to increase width by 16px and shift left by 8px */
+  /* To achieve this, the JS should set: left: el.offsetLeft - 8, width: el.offsetWidth + 16 */
+  pointer-events: none;
 }
 
-.tab-item {
+.navbar-darklight-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   background: transparent;
   border: none;
-  border-bottom: 3px solid transparent;
-  color: var(--color-primary);
-  font-family: 'Lexend', Arial, sans-serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  padding: 0 28px;
-  height: 54px;
   cursor: pointer;
-  transition: color 0.18s, border 0.18s, background 0.18s;
-  position: relative;
+  /* Remove margin-left, spacing is handled by last tab's margin-right */
+  height: 66px;
+  width: 40px;
+  padding: 0;
   outline: none;
+  box-shadow: none;
 }
 
-.tab-item .tab-label {
-  font-weight: 600;
-}
-
-.tab-item .tab-icon.leading {
-  margin-right: 4px;
-  display: flex;
-  align-items: center;
-}
-
-.tab-item .tab-icon.trailing {
-  margin-left: 4px;
-  display: flex;
-  align-items: center;
-  font-size: 0.95em;
-  background: var(--color-primary);
+.navbar-darklight-btn svg {
+  width: 16px;
+  height: 16px;
+  display: block;
   color: #fff;
-  border-radius: 12px;
-  padding: 0 8px;
-  font-size: 0.85em;
-  font-weight: 700;
 }
 
-.tab-item.active {
-  color: var(--color-primary);
-  border-bottom: 3px solid transparent;
-  background: transparent;
-  z-index: 1;
+.navbar-darklight-btn:focus,
+.navbar-darklight-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
-
-.tabs-container .tab-item:first-child {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
-
-.tabs-container .tab-item:last-child {
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-.tab-item,
-.tab-item.active {
-  background: transparent !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.tab-item:focus,
-.tab-item:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-} 

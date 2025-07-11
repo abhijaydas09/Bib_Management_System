@@ -1,22 +1,30 @@
 .toast-body {
   display: flex;
   align-items: center;
-  gap: 16px;
-  border-radius: 10px;
-  padding: 16px 20px;
-  min-width: 340px;
+  justify-content: flex-end;
+  gap: 6px; /* Reduced gap between action and dismiss button */
+  border-radius: 2px;
+  padding: 0 12px;
+  width: 250px;
+  height: 25px;
+  min-width: 250px;
+  max-width: 250px;
+  min-height: 25px;
+  max-height: 25px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.12);
   font-family: 'Lexend', Arial, sans-serif;
   font-size: 1rem;
   color: #fff;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   position: relative;
+  background: #222;
+  opacity: 1;
 }
 
 .toast-icon {
   display: flex;
   align-items: center;
-  font-size: 1.2em;
+  font-size: 0.85em;
   margin-right: 4px;
 }
 
@@ -24,43 +32,61 @@
   flex: 1;
   font-size: 1rem;
   color: #fff;
+  font-weight: 700; /* Toast text bold */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.toast-content b {
-  font-weight: 700;
+.toast-content ::placeholder,
+.toast-content .placeholder {
+  font-weight: 300; /* light */
+  opacity: 1;
+  color: #fff;
+}
+
+.toast-action,
+.toast-dismiss {
+  align-self: center;
+  margin-left: 0;
 }
 
 .toast-action {
-  background: #fff;
-  color: #222;
+  background: transparent;
+  color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 6px 18px;
+  border-radius: 2px;
+  padding: 2px 0;
+  width: 29px; /* Set width to 29px */
+  min-width: 29px;
+  max-width: 29px;
   font-family: 'Lexend', Arial, sans-serif;
   font-weight: 700;
   font-size: 1rem;
-  margin-left: 12px;
   cursor: pointer;
   transition: background 0.18s, color 0.18s;
+  opacity: 1;
+  margin-left: 0;
 }
 
 .toast-action:hover {
-  background: #f7f7f7;
+  background: rgba(255,255,255,0.10);
+  color: #fff;
 }
 
 .toast-dismiss {
   background: transparent;
   border: none;
   color: #fff;
-  margin-left: 8px;
   cursor: pointer;
-  padding: 4px;
+  padding: 2px;
   border-radius: 50%;
   transition: background 0.18s;
   display: flex;
   align-items: center;
+  opacity: 1;
 }
 
 .toast-dismiss:hover {
   background: rgba(255,255,255,0.12);
-} 
+}

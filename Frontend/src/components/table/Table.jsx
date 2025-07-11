@@ -2,48 +2,80 @@ import React from 'react';
 import './Table.css';
 
 function Table({ columns, data, summary, page, pageSize, total, onPageChange, onPageSizeChange, actionButton }) {
+  // Common page size options
+  const pageSizeOptions = [5, 10, 20, 50, 100];
+
   return (
-    <div className="table-root">
-      <div className="table-toolbar">
-        <div className="table-summary">Showing {page * pageSize + 1}-{Math.min((page + 1) * pageSize, total)} [items]</div>
-        {actionButton && <div className="table-action">{actionButton}</div>}
+    <div className="table-root" style={{ marginRight: 16 }}>
+      <div className="table-toolbar" style={{ paddingRight: 16 }}>
+        <div className="table-summary" style={{ gap: 0, marginRight: 0, paddingRight: 0 }}>
+          Showing {page * pageSize + 1}-{Math.min((page + 1) * pageSize, total)} [items]
+        </div>
+        {actionButton && (
+          <div className="table-action" style={{ paddingRight: 0 }}>
+            {actionButton}
+          </div>
+        )}
       </div>
-      <div className="table-scroll">
+      <div className="table-scroll" style={{ marginRight: 16 }}>
         <table className="table-main">
           <thead>
-            <tr className="table-header-row">
-              {columns.map(col => (
-                <th key={col.key} className="table-header-cell">{col.label}</th>
+            <tr className="table-header-row" style={{ gap: 0 }}>
+              {columns.map((col, idx) => (
+                <th
+                  key={col.key}
+                  className="table-header-cell"
+                  style={{
+                    paddingLeft: idx === 0 ? 16 : 8,
+                    paddingRight: idx === columns.length - 1 ? 16 : 8, // Up to 16px gap on rightmost cell
+                    gap: 0,
+                    textAlign: col.align ? col.align : 'left'
+                  }}
+                >
+                  {col.label}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {data.map((row, i) => (
               <tr key={i} className="table-row">
-                {columns.map(col => (
-                  <td key={col.key} className="table-cell">
+                {columns.map((col, idx) => (
+                  <td
+                    key={col.key}
+                    className="table-cell"
+                    style={{
+                      paddingLeft: idx === 0 ? 16 : 8,
+                      paddingRight: idx === columns.length - 1 ? 16 : 8, // Up to 16px gap on rightmost cell
+                      gap: 0,
+                      textAlign: col.align ? col.align : 'left'
+                    }}
+                  >
                     {col.render ? col.render(row[col.key], row) : row[col.key]}
                   </td>
                 ))}
               </tr>
             ))}
           </tbody>
-          {summary && (
-            <tfoot>
-              <tr className="table-footer-row">
-                <td colSpan={columns.length - 1} className="table-footer-label">Total / Summary</td>
-                <td className="table-footer-value">{summary}</td>
-              </tr>
-            </tfoot>
-          )}
         </table>
       </div>
-      <div className="table-pagination">
+      <div className="table-pagination" style={{ paddingRight: 16 }}>
         <div className="table-pagination-left">
           Showing {page * pageSize + 1}-{Math.min((page + 1) * pageSize, total)} of {total} [items]
         </div>
         <div className="table-pagination-right">
-          <span>{pageSize} rows / page</span>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <select
+              value={pageSize}
+              onChange={e => onPageSizeChange(Number(e.target.value))}
+              style={{ fontSize: 8, marginRight: 4, height: 18, borderRadius: 4, padding: '0 4px' }}
+            >
+              {pageSizeOptions.map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+            rows / page
+          </label>
           <button onClick={() => onPageChange(page - 1)} disabled={page === 0}>{'<'}</button>
           <button onClick={() => onPageChange(page + 1)} disabled={(page + 1) * pageSize >= total}>{'>'}</button>
         </div>

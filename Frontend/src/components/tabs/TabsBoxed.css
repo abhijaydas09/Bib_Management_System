@@ -1,47 +1,60 @@
 .tabsboxed-container {
   display: flex;
   align-items: center;
-  background: #fff;
+  justify-content: center; /* Center align all tabs horizontally */
+  background: #fff; /* Set background to white */
   border: 1.5px solid #e3e8ef;
   border-radius: 0;
   padding: 0;
   margin-bottom: 24px;
-  gap: 0;
+  gap: 0; /* No gap between boxes */
+  height: 33px;
+  min-height: 33px;
+  max-height: 33px;
+  position: relative;
+  width: fit-content; /* Auto adjust width to content */
+  min-width: 0; /* Remove any min-width restriction */
+  max-width: 100%; /* Prevent overflow */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tabsboxed-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0; /* No gap between boxes */
   background: transparent;
   border: none;
-  color: #8ca0b3;
+  color: #8298AE; /* non-active tab text color */
   font-family: 'Lexend', Arial, sans-serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  padding: 0 32px;
-  height: 54px;
+  font-size: 9px;
+  font-weight: 400; /* regular */
+  padding: 0 16px; /* 16px padding between text and box edge */
+  height: 33px;
+  min-height: 33px;
+  max-height: 33px;
   border-radius: 0;
   cursor: pointer;
   transition: background 0.18s, color 0.18s;
   outline: none;
   position: relative;
+  white-space: nowrap; /* Prevent tab text from wrapping */
 }
 
 .tabsboxed-item.active {
   background: #eaf4ff;
-  color: #1a2e44;
+  color: #0B405B; /* active font color */
   box-shadow: none;
   border-radius: 0;
 }
 
 [data-theme="dark"] .tabsboxed-container {
-  background: #232b32;
+  background: #fff; /* Set background to white even in dark mode */
   border: 1.5px solid var(--color-primary, #A8FD24);
 }
 
 [data-theme="dark"] .tabsboxed-item {
-  color: #8ca0b3;
+  color: #8298AE;
 }
 
 [data-theme="dark"] .tabsboxed-item.active {
@@ -51,7 +64,8 @@
 }
 
 .tabsboxed-label {
-  font-weight: 600;
+  font-weight: 400; /* regular */
+  font-size: 9px;
 }
 
 .tabsboxed-icon.leading {
@@ -64,25 +78,34 @@
   margin-left: 4px;
   display: flex;
   align-items: center;
-  font-size: 0.95em;
   background: var(--color-primary);
   color: #fff;
   border-radius: 12px;
   padding: 0 8px;
-  font-size: 0.85em;
+  font-size: 9px;
   font-weight: 700;
 }
 
-.tabsboxed-divider {
-  width: 1px;
-  height: 32px;
-  background: #e3e8ef;
-  margin: 0;
+/* Custom divider between tab texts */
+.tabsboxed-text-divider {
+  width: 0.5px;
+  height: 16px;
+  background: #8298ae;
+  margin: 0 8px;
   align-self: center;
+  display: inline-block;
 }
 
-[data-theme="dark"] .tabsboxed-divider {
-  background: #3a4651;
+.tabsboxed-slider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 29px; /* 4px less than 33px box */
+  background: var(--color-primary, #A8FD24);
+  border-radius: 0;
+  transition: left 0.18s, width 0.18s, background 0.18s;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .tabsboxed-item:focus,
