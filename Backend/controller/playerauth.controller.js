@@ -23,8 +23,8 @@ export const playersignUp=async (req,res)=>{
             email,
             password: hashedPassword
         });
+let token = await genToken({ playerId: player._id });
 
-        let token = await genToken(player._id);
         res.cookie("token", token,{
             httpOnly: true,
             secure:process.env.NODE_ENVIRONMENT= "production",

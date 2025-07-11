@@ -4,6 +4,7 @@ import {organiserLogin, organiserSignup , organiserLogout} from "../controller/o
 
 
 const authRouter  = express.Router()
+console.log("✅ auth.route.js loaded and imported");
 
 authRouter.post("/player_signup",playersignUp)
 authRouter.post("/player_login",playerLogin)
