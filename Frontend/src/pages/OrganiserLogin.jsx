@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import OrganiserNavbar from '../components/tabs/OrganiserNavbar';
 import '../components/text-inputs/BasicTextInput.css';
+import axios from 'axios';
 
 function OrganiserLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Add login logic here
-    alert('Organiser login submitted!');
+    try {
+      const res = await axios.post('http://localhost:5001/api/organiser-login', { email, password });
+      // Save token/user info as needed
+      localStorage.setItem('token', res.data.token);
+      alert('Login successful!');
+      // navigate('/dashboard') or similar
+    } catch (err) {
+      alert(err.response?.data?.message || 'Login failed');
+    }
   };
 
   // Fallback navigation for environments without react-router context

@@ -4,6 +4,7 @@ import OrganiserNavbar from '../components/tabs/OrganiserNavbar';
 import BasicTextInput from '../components/text-inputs/BasicTextInput.jsx';
 import { FaCamera, FaUser, FaVenusMars, FaEnvelope, FaLock, FaPhone, FaBuilding } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../components/text-inputs/BasicTextInput.css';
 
 const TAB_HEIGHT = 31;
@@ -59,13 +60,22 @@ function Signup() {
     }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     if (!acceptTerms) {
       alert('Please accept the terms and privacy policy.');
       return;
     }
-    alert('Signup submitted!');
+    try {
+      const endpoint = role === 'participant' ? 'http://localhost:5001/api/participant-signup' : 'http://localhost:5001/api/organiser-signup';
+      const res = await axios.post(endpoint, form);
+      alert('Signup successful!');
+      // Optionally auto-login or redirect
+      // localStorage.setItem('token', res.data.token);
+      // navigate('/login');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Signup failed');
+    }
   };
 
   // Handle tab click for participant

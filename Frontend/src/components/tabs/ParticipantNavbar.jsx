@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
-import { FaMoon } from 'react-icons/fa';
+import { FaMoon, FaUserCircle } from 'react-icons/fa';
 import './Tabs.css';
 import { AuthContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
@@ -58,6 +58,11 @@ function ParticipantNavbar({ onTabClick, activeTab, tabs }) {
             {tab.label && <span>{tab.label}</span>}
           </button>
         ))}
+        {isLoggedIn && (
+          <button className="navbar-profile-btn" onClick={() => navigate('/profile')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', marginLeft: 8 }}>
+            <FaUserCircle size={22} color="#fff" />
+          </button>
+        )}
         <button className="navbar-darklight-btn" onClick={() => { /* dark mode toggle */ }}>
           <FaMoon />
         </button>

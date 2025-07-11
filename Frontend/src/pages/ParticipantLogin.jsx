@@ -1,6 +1,7 @@
  
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import ParticipantNavbar from '../components/tabs/ParticipantNavbar';
 import '../components/text-inputs/BasicTextInput.css';
 
@@ -17,10 +18,17 @@ function ParticipantLogin() {
   const [activeTab, setActiveTab] = useState('/login');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Add login logic here
-    alert('Participant login submitted!');
+    try {
+      const res = await axios.post('http://localhost:5001/api/participant-login', { email, password });
+      // Save token/user info as needed
+      localStorage.setItem('token', res.data.token);
+      alert('Login successful!');
+      // navigate('/dashboard') or similar
+    } catch (err) {
+      alert(err.response?.data?.message || 'Login failed');
+    }
   };
 
   const handleSignupClick = (e) => {
