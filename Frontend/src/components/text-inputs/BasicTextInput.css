@@ -1,54 +1,59 @@
-.textinput-wrapper {
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400&display=swap');
+
+.basic-textinput-wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-02, 4px);
-  margin-bottom: var(--spacing-06, 24px);
+  gap: 4px;
+  width: 250px;
 }
 
-.textinput-label {
-  font-size: 1rem;
-  color: var(--color-text-primary);
+.basic-textinput-label {
   font-family: 'Lexend', Arial, sans-serif;
   font-weight: 400;
-  margin-bottom: 2px;
+  font-size: 1rem;
   text-align: left;
+  color: var(--input-label-color, #0B405B);
 }
 
-.textinput-input {
-  font-size: 1rem;
+.basic-textinput-input {
+  width: 250px;
+  height: 30px;
   font-family: 'Lexend', Arial, sans-serif;
-  font-weight: 400;
-  color: var(--color-text-primary);
-  background: var(--color-neutral);
-  border: 2px solid var(--color-border);
-  border-radius: 6px;
-  padding: var(--spacing-04, 12px);
+  font-weight: 300;
+  font-size: 8.5px;
+  color: var(--input-text-color, #222);
+  border: 0.5px solid var(--input-border-color, #000);
+  border-radius: 2px;
+  padding: 0 10px;
+  background: #fff;
   outline: none;
-  transition: border-color 0.2s, background 0.2s;
 }
 
-.textinput-wrapper.active .textinput-input,
-.textinput-input:focus {
-  border-color: var(--color-primary);
-}
-
-.textinput-wrapper.disabled .textinput-input {
-  background: #444;
-  color: #aaa;
-  border-color: #666;
-  cursor: not-allowed;
-}
-
-.textinput-wrapper.error .textinput-label,
-.textinput-wrapper.error .textinput-input {
-  color: var(--color-error);
-  border-color: var(--color-error);
-}
-
-.textinput-error {
-  color: var(--color-error);
-  font-size: 0.9rem;
-  margin-top: 2px;
+.basic-textinput-input::placeholder {
+  color: var(--input-placeholder-color, #676767);
   font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
+  font-size: 8.5px;
+}
+
+.basic-textinput-error {
+  color: var(--color-error, #e53935);
+  font-size: 0.6rem;
   text-align: left;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
+}
+
+/* Dark theme overrides */
+body[data-theme='dark'] .basic-textinput-input {
+  border-color: #fff;
+  background: #000;
+  color: #fff;
+}
+body[data-theme='dark'] .basic-textinput-label {
+  color: #A8FD24;
+}
+body[data-theme='dark'] .basic-textinput-input::placeholder {
+  color: #fff;
+  font-size: 8.5px;
 } 

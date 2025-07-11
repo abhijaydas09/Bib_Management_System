@@ -1,64 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400&display=swap');
+
 .dropdowninput-wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-02, 4px);
-  margin-bottom: var(--spacing-06, 24px);
+  gap: 4px;
+  width: 250px;
 }
 
 .dropdowninput-label {
-  font-size: 1rem;
-  color: var(--color-text-primary);
   font-family: 'Lexend', Arial, sans-serif;
   font-weight: 400;
-  margin-bottom: 2px;
+  font-size: 1rem;
   text-align: left;
+  color: var(--input-label-color, #0B405B);
 }
 
 .dropdowninput-field-group {
-  position: relative;
   display: flex;
+  width: 272px;
+  height: 30px;
+  border: 0.5px solid var(--input-border-color, #000);
+  border-radius: 2px;
+  background: #fff;
+  overflow: hidden;
   align-items: center;
-  border: 2px solid var(--color-border);
-  border-radius: 6px;
-  background: var(--color-neutral);
-  transition: border-color 0.2s, background 0.2s;
 }
 
 .dropdowninput-select {
   width: 100%;
-  font-size: 1rem;
-  font-family: 'Lexend', Arial, sans-serif;
-  font-weight: 400;
-  color: var(--color-text-primary);
-  background: transparent;
+  height: 100%;
   border: none;
+  background: #fff;
+  color: var(--input-text-color, #222);
+  font-size: 8.5px;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
   outline: none;
-  padding: var(--spacing-04, 12px) var(--spacing-10, 64px) var(--spacing-04, 12px) var(--spacing-04, 12px);
+  padding-left: 8px;
+  border-radius: 6px;
   appearance: none;
   cursor: pointer;
 }
 
 .dropdowninput-arrow {
-  position: absolute;
-  right: 16px;
+  margin-left: -28px;
   pointer-events: none;
   color: var(--color-text-muted);
-  font-size: 1rem;
 }
 
-.dropdowninput-wrapper.active .dropdowninput-field-group,
 .dropdowninput-field-group:focus-within {
   border-color: var(--color-primary);
 }
 
 .dropdowninput-wrapper.disabled .dropdowninput-field-group {
   background: #444;
-  border-color: #666;
-}
-
-.dropdowninput-wrapper.disabled .dropdowninput-select {
   color: #aaa;
-  cursor: not-allowed;
+  border-color: #666;
 }
 
 .dropdowninput-wrapper.error .dropdowninput-label,
@@ -68,9 +65,31 @@
 }
 
 .dropdowninput-error {
-  color: var(--color-error);
-  font-size: 0.9rem;
-  margin-top: 2px;
-  font-family: 'Lexend', Arial, sans-serif;
+  color: var(--color-error, #e53935);
+  font-size: 0.6rem;
   text-align: left;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
+}
+
+body[data-theme='dark'] .dropdowninput-field-group {
+  border-color: #fff;
+  background: #fff;
+}
+body[data-theme='dark'] .dropdowninput-label {
+  color: #A8FD24;
+}
+body[data-theme='dark'] .dropdowninput-select {
+  background: #fff;
+  color: #fff;
+}
+
+.textinput-input-short {
+  width: 400px;
+  height: 20px;
+}
+
+.textinput-input-long {
+  width: 900px;
+  height: 20px;
 } 

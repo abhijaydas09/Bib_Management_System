@@ -1,35 +1,31 @@
 import React from 'react';
 import './BasicTextInput.css';
 
-function TextInput({
+function BasicTextInput({
   label,
   placeholder,
   value,
   onChange,
+  type = 'text',
   disabled = false,
   error = '',
-  onFocus,
-  onBlur,
-  isActive = false,
-  ...props
+  ...rest
 }) {
   return (
-    <div className={`textinput-wrapper${disabled ? ' disabled' : ''}${error ? ' error' : ''}${isActive ? ' active' : ''}`}> 
-      <label className="textinput-label">{label}</label>
+    <div className="basic-textinput-wrapper">
+      {label && <label className="basic-textinput-label">{label}</label>}
       <input
-        className="textinput-input"
-        type="text"
+        className="basic-textinput-input"
+        type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         disabled={disabled}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        {...props}
+        {...rest}
       />
-      {error && <div className="textinput-error">{error}</div>}
+      {error && <div className="basic-textinput-error">{error}</div>}
     </div>
   );
 }
 
-export default TextInput; 
+export default BasicTextInput; 

@@ -1,53 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400&display=swap');
+
 .searchinput-wrapper {
   display: flex;
+  width: 272px;
+  height: 30px;
+  border: 0.5px solid var(--input-border-color, #000);
+  border-radius: 2px;
+  background: #fff;
+  overflow: hidden;
   align-items: center;
-  border: 2px solid var(--color-border);
-  border-radius: 6px;
-  background: var(--color-neutral);
-  transition: border-color 0.2s, background 0.2s;
-  width: 100%;
 }
 
 .searchinput-input {
   flex: 1;
-  font-size: 1rem;
-  font-family: 'Lexend', Arial, sans-serif;
-  font-weight: 400;
-  color: var(--color-text-primary);
-  background: transparent;
+  height: 100%;
   border: none;
+  background: #fff;
+  color: var(--input-text-color, #222);
+  font-size: 8.5px;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
   outline: none;
-  padding: var(--spacing-04, 12px);
+  padding-left: 8px;
+  border-radius: 6px 0 0 6px;
+}
+
+.searchinput-input::placeholder {
+  color: var(--input-placeholder-color, #676767);
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
+  font-size: 8.5px;
 }
 
 .searchinput-btn {
-  background: transparent;
+  height: 100%;
   border: none;
-  outline: none;
+  background: #fff;
+  color: var(--input-text-color, #222);
+  border-radius: 0 6px 6px 0;
+  padding: 0 12px;
   cursor: pointer;
-  padding: 0 var(--spacing-04, 12px);
   display: flex;
   align-items: center;
-  color: var(--color-text-muted);
-  transition: color 0.2s;
-  height: 100%;
+  justify-content: center;
 }
 
-.searchinput-wrapper.active {
-  border-color: var(--color-primary);
+.searchinput-error {
+  color: var(--color-error, #e53935);
+  font-size: 0.6rem;
+  text-align: left;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
 }
 
-.searchinput-wrapper.active .searchinput-btn {
-  color: var(--color-primary);
+body[data-theme='dark'] .searchinput-wrapper {
+  border-color: #fff;
+  background: #fff;
 }
-
-.searchinput-wrapper.disabled {
-  background: #444;
-  border-color: #666;
+body[data-theme='dark'] .searchinput-input {
+  background: #fff;
+  color: #fff;
 }
-
-.searchinput-wrapper.disabled .searchinput-input,
-.searchinput-wrapper.disabled .searchinput-btn {
-  color: #aaa;
-  cursor: not-allowed;
+body[data-theme='dark'] .searchinput-input::placeholder {
+  color: #fff;
+  font-size: 8.5px;
 } 

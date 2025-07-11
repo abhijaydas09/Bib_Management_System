@@ -12,11 +12,10 @@ function PhoneNumberInput({
   error = '',
   isActive = false,
   countryOptions = ['+1', '+91', '+44'],
-  ...props
 }) {
   return (
-    <div className={`phoneinput-wrapper${disabled ? ' disabled' : ''}${error ? ' error' : ''}${isActive ? ' active' : ''}`}> 
-      <label className="phoneinput-label">{label}</label>
+    <div className="phoneinput-wrapper">
+      {label && <label className="phoneinput-label">{label}</label>}
       <div className="phoneinput-field-group">
         <select
           className="phoneinput-country"
@@ -35,7 +34,6 @@ function PhoneNumberInput({
           value={value}
           onChange={onChange}
           disabled={disabled}
-          {...props}
         />
       </div>
       {error && <div className="phoneinput-error">{error}</div>}

@@ -11,10 +11,11 @@
   padding: 18px 20px 16px 20px;
   z-index: 100;
   font-family: 'Lexend', Arial, sans-serif;
-  font-size: 1rem;
+  font-size: 11px;
   pointer-events: none;
   opacity: 1;
   transition: opacity 0.18s;
+  text-align: left;
 }
 
 [data-theme="light"] .tooltip-box {
@@ -28,15 +29,17 @@
 }
 
 .tooltip-heading {
-  font-weight: 700;
-  font-size: 1.08rem;
+  font-weight: 400;
+  font-size: 11px;
   margin-bottom: 4px;
+  text-align: left;
 }
 
 .tooltip-body {
-  font-weight: 400;
-  font-size: 1rem;
+  font-weight: 300;
+  font-size: 9px;
   color: #cfd8e3;
+  text-align: left;
 }
 
 .tooltip-arrow {

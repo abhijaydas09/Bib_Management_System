@@ -1,81 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400&display=swap');
+
 .phoneinput-wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-02, 4px);
-  margin-bottom: var(--spacing-06, 24px);
+  gap: 4px;
+  width: 270px;
 }
 
 .phoneinput-label {
-  font-size: 1rem;
-  color: var(--color-text-primary);
   font-family: 'Lexend', Arial, sans-serif;
   font-weight: 400;
-  margin-bottom: 2px;
+  font-size: 1rem;
   text-align: left;
+  color: var(--input-label-color, #0B405B);
 }
 
 .phoneinput-field-group {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  border: 2px solid var(--color-border);
-  border-radius: 6px;
-  background: var(--color-neutral);
-  transition: border-color 0.2s, background 0.2s;
+  width: 272px;
+  height: 30px;
+  border: 0.5px solid var(--input-border-color, #000);
+  border-radius: 2px;
+  background: #fff;
+  overflow: hidden;
 }
 
 .phoneinput-country {
-  font-size: 1rem;
-  font-family: 'Lexend', Arial, sans-serif;
-  font-weight: 400;
-  color: var(--color-text-primary);
-  background: transparent;
+  width: 30px;
+  height: 100%;
   border: none;
+  background: #fff;
+  color: var(--input-text-color, #222);
+  font-size: 8.5px;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
   outline: none;
-  padding: 0 var(--spacing-03, 8px);
-  min-width: 56px;
+  border-right: 0.5px solid var(--input-border-color, #000);
+  border-radius: 6px 0 0 6px;
+  padding-left: 2px;
+  /* Remove default dropdown arrow for select */
   appearance: none;
-  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Optionally, hide background image for select in some browsers */
+  background-image: none;
 }
 
 .phoneinput-input {
   flex: 1;
-  font-size: 1rem;
-  font-family: 'Lexend', Arial, sans-serif;
-  font-weight: 400;
-  color: var(--color-text-primary);
-  background: transparent;
+  height: 100%;
   border: none;
+  background: #fff;
+  color: var(--input-text-color, #222);
+  font-size: 8.5px;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
   outline: none;
-  padding: var(--spacing-04, 12px);
+  padding-left: 8px;
+  border-radius: 0 6px 6px 0;
 }
 
-.phoneinput-wrapper.active .phoneinput-field-group,
-.phoneinput-field-group:focus-within {
-  border-color: var(--color-primary);
-}
-
-.phoneinput-wrapper.disabled .phoneinput-field-group {
-  background: #444;
-  border-color: #666;
-}
-
-.phoneinput-wrapper.disabled .phoneinput-country,
-.phoneinput-wrapper.disabled .phoneinput-input {
-  color: #aaa;
-  cursor: not-allowed;
-}
-
-.phoneinput-wrapper.error .phoneinput-label,
-.phoneinput-wrapper.error .phoneinput-field-group {
-  color: var(--color-error);
-  border-color: var(--color-error);
+.phoneinput-input::placeholder {
+  color: var(--input-placeholder-color, #676767);
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
+  font-size: 8.5px;
 }
 
 .phoneinput-error {
-  color: var(--color-error);
-  font-size: 0.9rem;
-  margin-top: 2px;
-  font-family: 'Lexend', Arial, sans-serif;
+  color: var(--color-error, #e53935);
+  font-size: 0.6rem;
   text-align: left;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-weight: 300;
+}
+
+body[data-theme='dark'] .phoneinput-field-group {
+  border-color: #fff;
+  background: #fff;
+}
+body[data-theme='dark'] .phoneinput-label {
+  color: #A8FD24;
+}
+body[data-theme='dark'] .phoneinput-country,
+body[data-theme='dark'] .phoneinput-input {
+  background: #fff;
+  color: #fff;
+}
+body[data-theme='dark'] .phoneinput-input::placeholder {
+  color: #fff;
+  font-size: 8.5px;
 } 

@@ -2,52 +2,70 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 0 32px;
-  height: 48px;
-  border-radius: 999px;
+  padding: 0 12px;
+  height: 28px;
+  min-width: 64px;
+  border-radius: 4px;
   border: none;
   background: var(--color-primary, #A8FD24);
-  color: #000;
+  color: #fff;
   font-family: 'Lexend', Arial, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 400;
   cursor: pointer;
-  transition: background 200ms, color 200ms, border 200ms, box-shadow 200ms;
+  transition: background 180ms, color 180ms;
   outline: none;
   position: relative;
-}
-
-.custom-btn .btn-icon {
-  display: flex;
-  align-items: center;
-  font-size: 1.25em;
+  width: auto;
+  text-align: center;
+  user-select: none;
+  gap: 6px;
 }
 
 .custom-btn .btn-label {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  letter-spacing: 0.01em;
+}
+
+/* Remove icon styles and arrow */
+.custom-btn .btn-icon {
+  display: none !important;
+}
+
+.custom-btn .btn-icon.leading,
+.custom-btn .btn-icon.trailing {
+  display: none !important;
 }
 
 .custom-btn:hover:not(.disabled):not(.loading):not(.skeleton) {
-  filter: brightness(0.93);
+  filter: brightness(0.96);
+  background: var(--color-primary-hover, #8be01c);
 }
 
-.custom-btn:active:not(.disabled):not(.loading):not(.skeleton) {
-  filter: brightness(0.85);
-}
-
-.custom-btn:focus-visible {
-  border: 1.5px solid #fff;
-  box-shadow: 0 0 0 2px #fff3;
+/* Disable after click effects */
+.custom-btn:active:not(.disabled):not(.loading):not(.skeleton),
+.custom-btn:focus-visible:not(.disabled):not(.loading):not(.skeleton) {
+  /* No visual effect on active/focus-visible */
+  box-shadow: none;
+  background: var(--color-primary, #A8FD24);
+  filter: none;
 }
 
 .custom-btn.disabled,
 .custom-btn:disabled {
   background: #444;
-  color: #aaa;
+  color: #fff;
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .custom-btn.loading {
@@ -56,13 +74,14 @@
 }
 
 .btn-spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid #fff;
-  border-top: 3px solid #A8FD24;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top: 2px solid #A8FD24;
   border-radius: 50%;
   animation: btn-spin 0.8s linear infinite;
   margin: 0 auto;
+  display: block;
 }
 
 @keyframes btn-spin {
@@ -90,4 +109,4 @@
 @keyframes skeleton-shimmer {
   0% { background-position: -200px 0; }
   100% { background-position: 200px 0; }
-} 
+}
