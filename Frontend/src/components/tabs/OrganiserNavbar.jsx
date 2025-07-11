@@ -37,7 +37,13 @@ function OrganiserNavbar({ onTabClick, activeTab }) {
             key={tab.label || idx}
             ref={el => tabRefs.current[idx] = el}
             className={"navbar-item" + (activeTab && activeTab === tab.path ? ' active' : '')}
-            onClick={onTabClick ? () => onTabClick(tab.path) : (tab.path === '/login' ? () => navigate('/login') : undefined)}
+            onClick={
+              onTabClick
+                ? () => onTabClick(tab.path)
+                : tab.path === '/login'
+                  ? () => navigate('/login')
+                  : undefined
+            }
             style={{
               borderBottom: activeTab && activeTab === tab.path ? '2px solid #A8FD24' : 'none',
               color: activeTab && activeTab === tab.path ? '#A8FD24' : '#fff',

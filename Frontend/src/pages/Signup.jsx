@@ -16,7 +16,7 @@ const PROFILE_CIRCLE = 60;
 const CAMERA_ICON = 40;
 const UPLOAD_BTN_WIDTH = 120;
 const UPLOAD_BTN_HEIGHT = 12;
-const INPUT_WIDTH = PROFILE_BOX_WIDTH;
+const INPUT_WIDTH = PROFILE_BOX_WIDTH - 20;
 const INPUT_HEIGHT = 31;
 const BUTTON_WIDTH = 267;
 const BUTTON_HEIGHT = 31;
@@ -114,9 +114,9 @@ function Signup() {
           }}
         >
           {/* Left column */}
-          <div style={{ width: INPUT_WIDTH, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ width: INPUT_WIDTH, display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: 16}}>
             {/* Profile picture upload */}
-            <div style={{ width: PROFILE_BOX_WIDTH, height: PROFILE_BOX_HEIGHT, background: '#f5f5f5', borderRadius: 4, border: '1px dashed #bbb', display: 'flex', alignItems: 'center', marginLeft: 3, marginBottom: 16, padding: 0 }}>
+            <div style={{ width: PROFILE_BOX_WIDTH, height: PROFILE_BOX_HEIGHT, background: '#f5f5f5', borderRadius: 4, border: '1px dashed #bbb', display: 'flex', alignItems: 'center', marginLeft: 18, marginBottom: 20, padding: 0 }}>
               <div style={{ width: PROFILE_CIRCLE, height: PROFILE_CIRCLE, borderRadius: '50%', background: '#e5e5e5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: 12, marginRight: 12, overflow: 'hidden' }}>
                 {profilePicUrl ? (
                   <img src={profilePicUrl} alt="Profile Preview" style={{ width: PROFILE_CIRCLE, height: PROFILE_CIRCLE, objectFit: 'cover', borderRadius: '50%' }} />
@@ -141,7 +141,7 @@ function Signup() {
                 value={form.gender}
                 onChange={handleChange}
                 icon={<FaVenusMars style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -151,7 +151,7 @@ function Signup() {
                 value={form.email}
                 onChange={handleChange}
                 icon={<FaEnvelope style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -161,13 +161,13 @@ function Signup() {
                 value={form.confirmPassword}
                 onChange={handleChange}
                 icon={<FaLock style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
             </div>
           </div>
           {/* Right column */}
-          <div style={{ width: INPUT_WIDTH, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ width: INPUT_WIDTH, display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: 16 }}>
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
               <BasicTextInput
                 name="firstName"
@@ -176,7 +176,7 @@ function Signup() {
                 value={form.firstName}
                 onChange={handleChange}
                 icon={<FaUser style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -186,7 +186,7 @@ function Signup() {
                 value={form.lastName}
                 onChange={handleChange}
                 icon={<FaUser style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -196,7 +196,7 @@ function Signup() {
                 value={form.phone}
                 onChange={handleChange}
                 icon={<FaPhone style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -206,7 +206,7 @@ function Signup() {
                 value={form.password}
                 onChange={handleChange}
                 icon={<FaLock style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               {/* Checkbox and terms */}
@@ -233,7 +233,7 @@ function Signup() {
             fontSize: 10,
             cursor: 'pointer',
             display: 'block',
-            margin: '16px auto 0 auto',
+            margin: '6px auto 0 auto',
           }}
         >
           Sign Up on Zemo
@@ -282,9 +282,9 @@ function Signup() {
           }}
         >
           {/* Left column */}
-          <div style={{ width: INPUT_WIDTH, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ width: INPUT_WIDTH, display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: 16 }}>
             {/* Profile picture upload */}
-            <div style={{ width: PROFILE_BOX_WIDTH, height: PROFILE_BOX_HEIGHT, background: '#f5f5f5', borderRadius: 4, border: '1px dashed #bbb', display: 'flex', alignItems: 'center', marginLeft: 3, marginBottom: 16, padding: 0 }}>
+            <div style={{ width: PROFILE_BOX_WIDTH, height: PROFILE_BOX_HEIGHT, background: '#f5f5f5', borderRadius: 4, border: '1px dashed #bbb', display: 'flex', alignItems: 'center', marginLeft: 21, marginBottom: 19, padding: 0 }}>
               <div style={{ width: PROFILE_CIRCLE, height: PROFILE_CIRCLE, borderRadius: '50%', background: '#e5e5e5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: 12, marginRight: 12, overflow: 'hidden' }}>
                 {profilePicUrl ? (
                   <img src={profilePicUrl} alt="Profile Preview" style={{ width: PROFILE_CIRCLE, height: PROFILE_CIRCLE, objectFit: 'cover', borderRadius: '50%' }} />
@@ -309,7 +309,7 @@ function Signup() {
                 value={form.gender}
                 onChange={handleChange}
                 icon={<FaVenusMars style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -319,7 +319,7 @@ function Signup() {
                 value={form.email}
                 onChange={handleChange}
                 icon={<FaEnvelope style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -329,13 +329,13 @@ function Signup() {
                 value={form.confirmPassword}
                 onChange={handleChange}
                 icon={<FaLock style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
             </div>
           </div>
           {/* Right column */}
-          <div style={{ width: INPUT_WIDTH, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ width: INPUT_WIDTH, display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight:16 }}>
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
               <BasicTextInput
                 name="firstName"
@@ -344,7 +344,7 @@ function Signup() {
                 value={form.firstName}
                 onChange={handleChange}
                 icon={<FaUser style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -354,7 +354,7 @@ function Signup() {
                 value={form.lastName}
                 onChange={handleChange}
                 icon={<FaUser style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -364,7 +364,7 @@ function Signup() {
                 value={form.phone}
                 onChange={handleChange}
                 icon={<FaPhone style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               <BasicTextInput
@@ -374,7 +374,7 @@ function Signup() {
                 value={form.password}
                 onChange={handleChange}
                 icon={<FaLock style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 16 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
               {/* Organisation Name input */}
@@ -385,19 +385,19 @@ function Signup() {
                 value={form.orgName}
                 onChange={handleChange}
                 icon={<FaBuilding style={{ fontSize: 14, color: '#0B405B' }} />}
-                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 0 }}
+                style={{ width: INPUT_WIDTH, height: INPUT_HEIGHT, marginBottom: 4 }}
                 required
               />
             </div>
           </div>
         </div>
         {/* Checkbox and terms for organiser, centered under both columns, 8px below grid */}
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: -4, marginBottom: 0, fontSize: 8 }}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: -12, marginBottom: 0, fontSize: 8 }}>
           <input
             type="checkbox"
             checked={acceptTerms}
             onChange={e => setAcceptTerms(e.target.checked)}
-            style={{ marginRight: 8, marginTop: 2 }}
+            style={{ marginRight: 8, marginTop: 0 }}
           />
           <span style={{ fontSize: 8, color: '#222' }}>
             I accept the <a href="#" style={{ color: '#1291D0', textDecoration: 'underline' }}>Terms and Services</a> and have read the <a href="#" style={{ color: '#1291D0', textDecoration: 'underline' }}>Privacy Policy</a>. I agree that Zemo may share my information with the tournament organiser.
@@ -417,7 +417,7 @@ function Signup() {
             fontSize: 10,
             cursor: 'pointer',
             display: 'block',
-            margin: '16px auto 0 auto',
+            margin: '4px auto 0 auto',
           }}
         >
           Sign Up on Zemo

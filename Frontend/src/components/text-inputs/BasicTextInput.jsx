@@ -9,6 +9,7 @@ function BasicTextInput({
   type = 'text',
   disabled = false,
   error = '',
+  ...rest
 }) {
   return (
     <div className="basic-textinput-wrapper">
@@ -20,6 +21,7 @@ function BasicTextInput({
         value={value}
         onChange={onChange}
         disabled={disabled}
+        {...rest}
       />
       {error && <div className="basic-textinput-error">{error}</div>}
     </div>
