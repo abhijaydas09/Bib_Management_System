@@ -1,9 +1,9 @@
  
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ParticipantNavbar from '../components/tabs/ParticipantNavbar';
-import '../components/text-inputs/BasicTextInput.css';
 import axios from 'axios';
+import ParticipantNavbar from '../../components/tabs/ParticipantNavbar';
+import '../../components/text-inputs/BasicTextInput.css';
 
 const participantTabs = [
   { label: 'Home', path: '/participant/home' },
@@ -18,7 +18,7 @@ function ParticipantLogin() {
   const [activeTab, setActiveTab] = useState('/login');
   const navigate = useNavigate();
 
-const handleLogin = async (e) => {
+  const handleLogin = async (e) => {
   e.preventDefault();
   try {
     const response = await axios.post('http://localhost:8000/api/auth/player_login', {
@@ -58,11 +58,7 @@ const handleLogin = async (e) => {
     >
       {/* Navbar aligned to the very top */}
       <div style={{ width: '100%' }}>
-        <ParticipantNavbar
-          onTabClick={setActiveTab}
-          activeTab={activeTab}
-          tabs={participantTabs}
-        />
+        <ParticipantNavbar forceLoggedOut={true} />
       </div>
       {/* Box 24px below the navbar */}
       <div

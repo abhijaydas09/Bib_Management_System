@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FaMoon } from 'react-icons/fa';
+import { FaMoon, FaUserCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import './Tabs.css';
 
 const staffTabs = [
@@ -9,10 +10,11 @@ const staffTabs = [
   { label: 'Logout', action: 'logout', isLogout: true },
 ];
 
-function StaffNavbar({ onTabClick, activeTab }) {
+function StaffNavbar({ onTabClick, activeTab, isLoggedIn = false }) {
   const sliderRef = useRef(null);
   const tabRefs = useRef([]);
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const idx = staffTabs.findIndex(tab => tab.path === activeTab);
@@ -39,6 +41,11 @@ function StaffNavbar({ onTabClick, activeTab }) {
             {tab.label && <span>{tab.label}</span>}
           </button>
         ))}
+        {isLoggedIn && (
+          <button className="navbar-profile-btn" onClick={() => navigate('/profile')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', marginLeft: 8 }}>
+            <FaUserCircle size={22} color="#fff" />
+          </button>
+        )}
         <button className="navbar-darklight-btn" onClick={() => { /* dark mode toggle */ }}>
           <FaMoon />
         </button>

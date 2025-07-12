@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import OrganiserNavbar from '../components/tabs/OrganiserNavbar';
-import '../components/text-inputs/BasicTextInput.css';
+import OrganiserNavbar from '../../components/tabs/OrganiserNavbar';
+import '../../components/text-inputs/BasicTextInput.css';
+import axios from 'axios';
 
 function OrganiserLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-const handleLogin = async (e) => {
+ const handleLogin = async (e) => {
   e.preventDefault();
   try {
-    const response = await axios.post('http://localhost:8000/api/auth/player_login', {
+    const response = await axios.post('http://localhost:8000/api/auth/organiser_login', {
       email,
       password
     });
@@ -26,7 +27,6 @@ const handleLogin = async (e) => {
     alert(err.response?.data?.message || 'Login failed');
   }
 };
-
 
   // Fallback navigation for environments without react-router context
   const handleSignupClick = (e) => {
@@ -46,7 +46,7 @@ const handleLogin = async (e) => {
         width: '100vw',
       }}
     >
-      <OrganiserNavbar onTabClick={() => {}} activeTab={null} />
+      <OrganiserNavbar forceLoggedOut={true} />
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '80vh', marginTop: 24 }}>
         <form onSubmit={handleLogin} style={{ background: '#fff', padding: 32, borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.07)', minWidth: 320 }}>
           <h2 style={{ textAlign: 'center', marginBottom: 16, color: '#000' }}>Organiser Login</h2>

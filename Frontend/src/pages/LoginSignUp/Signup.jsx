@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import ParticipantNavbar from '../components/tabs/ParticipantNavbar';
-import OrganiserNavbar from '../components/tabs/OrganiserNavbar';
-import BasicTextInput from '../components/text-inputs/BasicTextInput.jsx';
+import ParticipantNavbar from '../../components/tabs/ParticipantNavbar';
+import OrganiserNavbar from '../../components/tabs/OrganiserNavbar';
+import BasicTextInput from '../../components/text-inputs/BasicTextInput.jsx';
 import { FaCamera, FaUser, FaVenusMars, FaEnvelope, FaLock, FaPhone, FaBuilding } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import '../components/text-inputs/BasicTextInput.css';
 import axios from 'axios';
-
+import '../../components/text-inputs/BasicTextInput.css';
 
 const TAB_HEIGHT = 31;
 const TAB_WIDTH = 626;
@@ -41,7 +40,7 @@ function Signup() {
   const [profilePicUrl, setProfilePicUrl] = useState(null);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [form, setForm] = useState({
-    firstName: '', lastName: '', gender: '', phoneNumber: '', email: '', password: '', confirmPassword: '', orgName: ''
+    firstName: '', lastName: '', gender: '', phone: '', email: '', password: '', confirmPassword: '', orgName: ''
   });
   const [activeParticipantTab, setActiveParticipantTab] = useState(participantTabs[0].path);
   const [activeOrganiserTab, setActiveOrganiserTab] = useState(organiserTabs[0].path);
@@ -96,7 +95,6 @@ const handleParticipantSignup = async (e) => {
   }
 };
 
-
 const handleOrganiserSignup = async (e) => {
   e.preventDefault();
 
@@ -132,8 +130,6 @@ const handleOrganiserSignup = async (e) => {
     alert(err.response?.data?.message || 'Signup failed.');
   }
 };
-
-
 
   // Handle tab click for participant
   const handleParticipantTabClick = (path) => {
