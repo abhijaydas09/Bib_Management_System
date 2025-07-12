@@ -10,7 +10,7 @@ const organiserTabs = [
   { label: 'Create a Event', path: '/organiser/create-event' }
 ];
 
-function OrganiserNavbar({ onTabClick, activeTab }) {
+function OrganiserNavbar({ onTabClick, activeTab, forceLoggedOut }) {
   const sliderRef = useRef(null);
   const tabRefs = useRef([]);
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
@@ -57,7 +57,11 @@ function OrganiserNavbar({ onTabClick, activeTab }) {
             {tab.label && <span>{tab.label}</span>}
           </button>
         ))}
-        {isLoggedIn && (
+        {(!isLoggedIn || forceLoggedOut) ? (
+          <button className="navbar-login-btn" onClick={() => navigate('/organiser/login')} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', marginLeft: 8, fontWeight: 400, fontSize: 14 }}>
+            Login
+          </button>
+        ) : (
           <button className="navbar-profile-btn" onClick={() => navigate('/profile')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', marginLeft: 8 }}>
             <FaUserCircle size={22} color="#fff" />
           </button>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import OrganiserNavbar from '../components/tabs/OrganiserNavbar';
-import '../components/text-inputs/BasicTextInput.css';
+import OrganiserNavbar from '../../components/tabs/OrganiserNavbar';
+import '../../components/text-inputs/BasicTextInput.css';
 import axios from 'axios';
 
 function OrganiserLogin() {
@@ -38,7 +38,7 @@ function OrganiserLogin() {
         width: '100vw',
       }}
     >
-      <OrganiserNavbar onTabClick={() => {}} activeTab={null} />
+      <OrganiserNavbar forceLoggedOut={true} />
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '80vh', marginTop: 24 }}>
         <form onSubmit={handleLogin} style={{ background: '#fff', padding: 32, borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.07)', minWidth: 320 }}>
           <h2 style={{ textAlign: 'center', marginBottom: 16, color: '#000' }}>Organiser Login</h2>

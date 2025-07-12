@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import ParticipantNavbar from '../components/tabs/ParticipantNavbar';
-import OrganiserNavbar from '../components/tabs/OrganiserNavbar';
-import BasicTextInput from '../components/text-inputs/BasicTextInput.jsx';
+import ParticipantNavbar from '../../components/tabs/ParticipantNavbar';
+import OrganiserNavbar from '../../components/tabs/OrganiserNavbar';
+import BasicTextInput from '../../components/text-inputs/BasicTextInput.jsx';
 import { FaCamera, FaUser, FaVenusMars, FaEnvelope, FaLock, FaPhone, FaBuilding } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../components/text-inputs/BasicTextInput.css';
+import '../../components/text-inputs/BasicTextInput.css';
 
 const TAB_HEIGHT = 31;
 const TAB_WIDTH = 626;

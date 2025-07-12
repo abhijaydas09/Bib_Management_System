@@ -1,3 +1,6 @@
+/* Font Import and Typography System */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700&display=swap');
+
 :root {
   --color-primary: #0B405B;
   --color-secondary-1: #94D82A;
@@ -79,8 +82,7 @@
   --palette-dark-mushroom: #B3AC9B;
 }
 
-/* Font Import and Typography System */
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700&display=swap');
+
 
 body {
   font-family: 'Lexend', Arial, sans-serif;

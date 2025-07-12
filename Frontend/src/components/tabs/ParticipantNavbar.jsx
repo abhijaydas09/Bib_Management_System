@@ -10,7 +10,7 @@ const participantTabs = [
   { label: 'My Events', path: '/participant/my-events' }
 ];
 
-function ParticipantNavbar({ onTabClick, activeTab, tabs }) {
+function ParticipantNavbar({ onTabClick, activeTab, tabs, forceLoggedOut }) {
   const sliderRef = useRef(null);
   const tabRefs = useRef([]);
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
@@ -58,7 +58,11 @@ function ParticipantNavbar({ onTabClick, activeTab, tabs }) {
             {tab.label && <span>{tab.label}</span>}
           </button>
         ))}
-        {isLoggedIn && (
+        {(!isLoggedIn || forceLoggedOut) ? (
+          <button className="navbar-login-btn" onClick={() => navigate('/participant/login')} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', marginLeft: 8, fontWeight: 400, fontSize: 14 }}>
+            Login
+          </button>
+        ) : (
           <button className="navbar-profile-btn" onClick={() => navigate('/profile')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', marginLeft: 8 }}>
             <FaUserCircle size={22} color="#fff" />
           </button>

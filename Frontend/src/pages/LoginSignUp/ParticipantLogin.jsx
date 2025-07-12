@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ParticipantNavbar from '../components/tabs/ParticipantNavbar';
-import '../components/text-inputs/BasicTextInput.css';
+import ParticipantNavbar from '../../components/tabs/ParticipantNavbar';
+import '../../components/text-inputs/BasicTextInput.css';
 
 const participantTabs = [
   { label: 'Home', path: '/participant/home' },
@@ -50,11 +50,7 @@ function ParticipantLogin() {
     >
       {/* Navbar aligned to the very top */}
       <div style={{ width: '100%' }}>
-        <ParticipantNavbar
-          onTabClick={setActiveTab}
-          activeTab={activeTab}
-          tabs={participantTabs}
-        />
+        <ParticipantNavbar forceLoggedOut={true} />
       </div>
       {/* Box 24px below the navbar */}
       <div
