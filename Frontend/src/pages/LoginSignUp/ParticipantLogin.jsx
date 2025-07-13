@@ -97,7 +97,7 @@ function ParticipantLogin() {
               the inline style will be overridden.
               To ensure the font weight is applied, use a numeric value (700) and check for !important in CSS.
             */}
-            <h2 style={{ textAlign: 'center', marginBottom: 8, color: '#000', width: '100%', fontWeight: 700, fontSize: 16 }}>Login</h2>
+            <h2 style={{ textAlign: 'center', marginBottom: 8, color: '#000', width: '100%', fontWeight: 700, fontSize: 16 }}>Participant Login</h2>
             {/* Welcome back text, 12px below Login */}
             <div
               style={{

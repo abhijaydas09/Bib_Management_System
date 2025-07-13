@@ -6,6 +6,9 @@ import Signup from './pages/LoginSignUp/Signup';
 import ParticipantCompleteProfile from './pages/CompleteProfile/ParticipantCompleteProfile';
 import OrganiserCompleteProfile from './pages/CompleteProfile/OrganiserCompleteProfile';
 import LandingPage from './pages/LandingPage';
+import Footer from './components/footer/Footer';
+import './components/footer/Footer.css';
+import EventOverview from './pages/CreateEvent/EventOverview';
 
 // Create AuthContext
 export const AuthContext = createContext();
@@ -26,6 +29,7 @@ function App() {
         {/* Add other routes as needed */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      <Footer />
     </AuthContext.Provider>
   );
 }

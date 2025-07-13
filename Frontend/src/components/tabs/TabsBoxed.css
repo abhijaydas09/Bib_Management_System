@@ -14,7 +14,6 @@
   position: relative;
   width: fit-content; /* Auto adjust width to content */
   min-width: 0; /* Remove any min-width restriction */
-  max-width: 100%; /* Prevent overflow */
   margin-left: auto;
   margin-right: auto;
 }
