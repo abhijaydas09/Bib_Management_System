@@ -75,23 +75,11 @@ function QRLogs() {
       setLoadingInfo(true);
       setInfoError('');
       try {
-        // 1. Fetch registration info
+        // Fetch registration info using the scanned QR code value
         const regRes = await axios.get(`/api/registration/verify/${result[0].rawValue}`);
         if (!regRes.data.success || !regRes.data.data) throw new Error(regRes.data.message || 'No registration found');
         const reg = regRes.data.data;
-        // 2. Fetch event info
-        let event = {};
-        try {
-          const eventRes = await axios.get(`/api/events/${reg.event}`);
-          event = eventRes.data.data || {};
-        } catch (e) { event = {}; }
-        // 3. Fetch category info
-        let category = {};
-        try {
-          const catRes = await axios.get(`/api/categories/${reg.category}`);
-          category = catRes.data.data || {};
-        } catch (e) { category = {}; }
-        setParticipantInfo({ reg, event, category });
+        setParticipantInfo(reg);
         setInfoModalOpen(true);
       } catch (err) {
         setInfoError(err.message || 'Failed to fetch participant info');
@@ -238,22 +226,22 @@ function QRLogs() {
               {/* Modal Content */}
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 32 }}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 20, color: '#0B405B', marginBottom: 8 }}>{participantInfo.event.eventName || 'EVENT NAME'}</div>
-                  <div style={{ fontWeight: 600, fontSize: 16, color: '#0B405B', marginBottom: 8 }}>{participantInfo.reg.firstName} {participantInfo.reg.lastName}</div>
-                  <div style={{ fontWeight: 400, fontSize: 14, color: '#0B405B', marginBottom: 4 }}>Bib Number: <span style={{ fontWeight: 500 }}>{participantInfo.reg.bibNumber}</span></div>
-                  <div style={{ fontWeight: 400, fontSize: 14, color: '#0B405B', marginBottom: 4 }}>Category: <span style={{ fontWeight: 500 }}>{participantInfo.category.category_name || ''}</span></div>
-                  <div style={{ fontWeight: 400, fontSize: 14, color: '#0B405B', marginBottom: 4 }}>T-Shirt Size: <span style={{ fontWeight: 500 }}>{participantInfo.reg.kitSize}</span></div>
+                  <div style={{ fontWeight: 700, fontSize: 20, color: '#0B405B', marginBottom: 8 }}>{participantInfo.eventName || 'EVENT NAME'}</div>
+                  <div style={{ fontWeight: 600, fontSize: 16, color: '#0B405B', marginBottom: 8 }}>{participantInfo.firstName} {participantInfo.lastName}</div>
+                  <div style={{ fontWeight: 400, fontSize: 14, color: '#0B405B', marginBottom: 4 }}>Bib Number: <span style={{ fontWeight: 500 }}>{participantInfo.bibNumber}</span></div>
+                  <div style={{ fontWeight: 400, fontSize: 14, color: '#0B405B', marginBottom: 4 }}>Category: <span style={{ fontWeight: 500 }}>{participantInfo.category || ''}</span></div>
+                  <div style={{ fontWeight: 400, fontSize: 14, color: '#0B405B', marginBottom: 4 }}>T-Shirt Size: <span style={{ fontWeight: 500 }}>{participantInfo.kitSize}</span></div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 16 }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <FaCamera style={{ color: '#0B405B', fontSize: 18 }} />
-                      <span style={{ fontWeight: 400, fontSize: 14 }}>{participantInfo.event.eventDate ? new Date(participantInfo.event.eventDate).toLocaleDateString() : 'EVENT DATE'}</span>
+                      <span style={{ fontWeight: 400, fontSize: 14 }}>{participantInfo.eventDate ? new Date(participantInfo.eventDate).toLocaleDateString() : 'EVENT DATE'}</span>
                     </span>
-                    <span style={{ fontWeight: 400, fontSize: 14 }}>{participantInfo.event.venue || 'VENUE'}</span>
+                    <span style={{ fontWeight: 400, fontSize: 14 }}>{participantInfo.venue || 'VENUE'}</span>
                   </div>
                 </div>
                 {/* Avatar/Initials */}
                 <div style={{ width: 72, height: 72, borderRadius: '50%', background: '#eaf4ff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: '#0B405B', fontWeight: 600 }}>
-                  {participantInfo.reg.firstName?.[0]}{participantInfo.reg.lastName?.[0]}
+                  {participantInfo.firstName?.[0]}{participantInfo.lastName?.[0]}
                 </div>
               </div>
               {/* Action Buttons */}
