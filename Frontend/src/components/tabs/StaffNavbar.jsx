@@ -1,22 +1,24 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import { FaMoon, FaUserCircle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import './Tabs.css';
+import { AuthContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
 
 const staffTabs = [
   { label: 'Home', path: '/staff/home' },
   { label: 'Event Details', path: '/staff/event-details' },
-  { label: 'QR Logs', path: '/staff/qr-logs' },
-  { label: 'Logout', action: 'logout', isLogout: true },
+  { label: 'QR Logs', path: '/staff/qr-logs' }
 ];
 
-function StaffNavbar({ onTabClick, activeTab, isLoggedIn = false }) {
+function StaffNavbar({ onTabClick, activeTab, forceLoggedOut }) {
   const sliderRef = useRef(null);
   const tabRefs = useRef([]);
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
+  const { isLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!activeTab) return;
     const idx = staffTabs.findIndex(tab => tab.path === activeTab);
     if (idx !== -1 && tabRefs.current[idx]) {
       const el = tabRefs.current[idx];
@@ -34,15 +36,30 @@ function StaffNavbar({ onTabClick, activeTab, isLoggedIn = false }) {
           <button
             key={tab.label || idx}
             ref={el => tabRefs.current[idx] = el}
-            className={`navbar-item${activeTab === tab.path ? ' active' : ''}`}
-            onClick={() => tab.action ? tab.action() : onTabClick(tab.path)}
+            className={"navbar-item" + (activeTab && activeTab === tab.path ? ' active' : '')}
+            onClick={
+              onTabClick
+                ? () => onTabClick(tab.path)
+                : () => navigate(tab.path)
+            }
+            style={{
+              borderBottom: activeTab && activeTab === tab.path ? '2px solid #A8FD24' : 'none',
+              color: activeTab && activeTab === tab.path ? '#A8FD24' : '#fff',
+              fontWeight: 400,
+              fontSize: 14,
+              background: 'transparent',
+              transition: 'color 0.18s',
+            }}
           >
-            {tab.icon}
             {tab.label && <span>{tab.label}</span>}
           </button>
         ))}
-        {isLoggedIn && (
-          <button className="navbar-profile-btn" onClick={() => navigate('/profile')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', marginLeft: 8 }}>
+        {(!isLoggedIn || forceLoggedOut) ? (
+          <button className="navbar-login-btn" onClick={() => navigate('/staff/login')} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', marginLeft: 8, fontWeight: 400, fontSize: 14 }}>
+            Login
+          </button>
+        ) : (
+          <button className="navbar-profile-btn" onClick={() => navigate('/staff/profile')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', marginLeft: 8 }}>
             <FaUserCircle size={22} color="#fff" />
           </button>
         )}
@@ -50,7 +67,7 @@ function StaffNavbar({ onTabClick, activeTab, isLoggedIn = false }) {
           <FaMoon />
         </button>
       </div>
-      <div className="tab-slider" ref={sliderRef} style={{ ...sliderStyle, position: 'absolute' }} />
+      {activeTab && <div className="tab-slider" ref={sliderRef} style={{ ...sliderStyle, position: 'absolute' }} />}
     </nav>
   );
 }

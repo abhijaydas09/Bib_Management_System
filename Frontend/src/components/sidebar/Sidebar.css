@@ -1,0 +1,114 @@
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: #fff;
+  border: 1.5px solid #e3e8ef;
+  border-radius: 0;
+  padding: 0;
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
+  height: 100%;
+  box-sizing: border-box;
+  transition: width 0.5s ease;
+}
+
+.sidebar-container:hover {
+  width: 260px;
+  min-width: 260px;
+  max-width: 260px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  color: #b3b3b3;
+  font-family: 'Lexend', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 15px 0;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, padding 0.5s ease;
+  outline: none;
+  width: 100%;
+  text-align: left;
+  border-radius: 0;
+  justify-content: center;
+}
+
+.sidebar-container:hover .sidebar-item {
+  justify-content: flex-start;
+  padding: 15px 33px;
+}
+
+.sidebar-item.active {
+  background: #eaf4ff;
+  color: #0B405B;
+}
+
+.sidebar-icon {
+  display: flex;
+  align-items: center;
+  font-size: 22px;
+}
+
+.sidebar-label {
+  display: none;
+  flex: 1;
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.sidebar-container:hover .sidebar-label {
+  display: block;
+  opacity: 1;
+  margin-left: 12px;
+}
+
+.sidebar-divider {
+  height: 1px;
+  width: 80%;
+  background: #e3e8ef;
+  margin: 0 auto;
+  display: block;
+  transition: width 0.5s ease;
+}
+
+.sidebar-container:hover .sidebar-divider {
+  width: 80%;
+}
+
+.sidebar-item:focus,
+.sidebar-item:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 900px) {
+  .sidebar-container {
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+  }
+  .sidebar-container:hover {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+  }
+}
+
+.sidebar-item:last-child {
+  color: #e53935;
+  font-weight: 500;
+}
+
+.sidebar-item:last-child.active {
+  background: #fff0f0;
+  color: #e53935;
+} 

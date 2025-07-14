@@ -1,14 +1,20 @@
 import React, { useState, createContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import ParticipantLogin from './pages/LoginSignUp/ParticipantLogin';
-import OrganiserLogin from './pages/LoginSignUp/OrganiserLogin';
-import Signup from './pages/LoginSignUp/Signup';
-import ParticipantCompleteProfile from './pages/CompleteProfile/ParticipantCompleteProfile';
-import OrganiserCompleteProfile from './pages/CompleteProfile/OrganiserCompleteProfile';
-import LandingPage from './pages/LandingPage';
-import Footer from './components/footer/Footer';
-import './components/footer/Footer.css';
-import EventOverview from './pages/CreateEvent/EventOverview';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import StaffLogin from './pages/Staff/StaffLogin';
+import StaffHome from './pages/Staff/Home';
+import StaffEventDetails from './pages/Staff/EventDetails';
+import StaffQRLogs from './pages/Staff/QRLogs';
+import StaffProfile from './pages/Staff/Profile';
+// import ParticipantLogin from './pages/LoginSignUp/ParticipantLogin';
+// import OrganiserLogin from './pages/LoginSignUp/OrganiserLogin';
+// import Signup from './pages/LoginSignUp/Signup';
+// import ParticipantCompleteProfile from './pages/CompleteProfile/ParticipantCompleteProfile';
+// import OrganiserCompleteProfile from './pages/CompleteProfile/OrganiserCompleteProfile';
+// import LandingPage from './pages/LandingPage';
+// import Footer from './components/footer/Footer';
+// import './components/footer/Footer.css';
+// import EventOverview from './pages/CreateEvent/EventOverview';
+// import MarathonManagement from './pages/MarathonManagement/MarathonManagement';
 
 // Create AuthContext
 export const AuthContext = createContext();
@@ -20,16 +26,14 @@ function App() {
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/participant/login" element={<ParticipantLogin />} />
-        <Route path="/organiser/login" element={<OrganiserLogin />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/participant/complete-profile" element={<ParticipantCompleteProfile />} />
-        <Route path="/organiser/complete-profile" element={<OrganiserCompleteProfile />} />
+        <Route path="/staff/login" element={<StaffLogin />} />
+        <Route path="/staff/home" element={<StaffHome />} />
+        <Route path="/staff/event-details" element={<StaffEventDetails />} />
+        <Route path="/staff/qr-logs" element={<StaffQRLogs />} />
+        <Route path="/staff/profile" element={<StaffProfile />} />
         {/* Add other routes as needed */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/staff/login" />} />
       </Routes>
-      <Footer />
     </AuthContext.Provider>
   );
 }
