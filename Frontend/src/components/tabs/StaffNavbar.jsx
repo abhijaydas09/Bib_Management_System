@@ -10,7 +10,7 @@ const staffTabs = [
   { label: 'QR Logs', path: '/staff/qr-logs' }
 ];
 
-function StaffNavbar({ onTabClick, activeTab, forceLoggedOut }) {
+function StaffNavbar({ onTabClick, activeTab,  }) {
   const sliderRef = useRef(null);
   const tabRefs = useRef([]);
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
@@ -54,7 +54,7 @@ function StaffNavbar({ onTabClick, activeTab, forceLoggedOut }) {
             {tab.label && <span>{tab.label}</span>}
           </button>
         ))}
-        {(!isLoggedIn || forceLoggedOut) ? (
+        {(!isLoggedIn ) ? (
           <button className="navbar-login-btn" onClick={() => navigate('/staff/login')} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', marginLeft: 8, fontWeight: 400, fontSize: 14 }}>
             Login
           </button>
