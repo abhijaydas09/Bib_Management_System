@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import StaffNavbar from '../../components/tabs/StaffNavbar';
 import Table from '../../components/table/Table';
 import BasicTextInput from '../../components/text-inputs/BasicTextInput';
 import { FaCamera } from 'react-icons/fa';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import axios from 'axios';
+import jsQR from 'jsqr';
+import Toast from '../../components/toast/Toast';
+import QRScannerTest from './QRScannerTest';
 
 // Columns for Bib Collection tab
 const bibCollectionColumns = [
@@ -68,25 +71,77 @@ function QRLogs() {
   const [infoModalOpen, setInfoModalOpen] = useState(false);
   const [loadingInfo, setLoadingInfo] = useState(false);
   const [infoError, setInfoError] = useState('');
+  const fileInputRef = useRef();
+  const [toast, setToast] = useState(null);
+  const [qrValue, setQrValue] = useState(null);
 
+  // Helper to extract qrCode from various QR formats
+  function extractQrCode(value) {
+    if (!value) return '';
+    // If value is a URL, get last path segment
+    try {
+      const url = new URL(value);
+      const segments = url.pathname.split('/').filter(Boolean);
+      if (segments.length > 0) return segments[segments.length - 1];
+    } catch (e) { /* Not a URL */ }
+    // If value is JSON, try to parse and get qrCode property
+    try {
+      const obj = JSON.parse(value);
+      if (obj.qrCode) return obj.qrCode;
+    } catch (e) { /* Not JSON */ }
+    // Otherwise, return as is
+    return value;
+  }
+
+  // QR scan handler: fetch participant info and show modal
   const handleScan = async (result) => {
     if (result && result[0] && result[0].rawValue) {
       setScannerOpen(false);
       setLoadingInfo(true);
       setInfoError('');
       try {
-        // Fetch registration info using the scanned QR code value
-        const regRes = await axios.get(`/api/registration/verify/${result[0].rawValue}`);
-        if (!regRes.data.success || !regRes.data.data) throw new Error(regRes.data.message || 'No registration found');
-        const reg = regRes.data.data;
-        setParticipantInfo(reg);
+        const qrCode = extractQrCode(result[0].rawValue);
+        const regRes = await axios.get(`/api/registration/verify/${qrCode}`);
+        if (!regRes.data.success || !regRes.data.data) {
+          setToast({ type: 'error', content: 'No registration found' });
+          setLoadingInfo(false);
+          return;
+        }
+        setParticipantInfo(regRes.data.data);
         setInfoModalOpen(true);
       } catch (err) {
-        setInfoError(err.message || 'Failed to fetch participant info');
+        setToast({ type: 'error', content: err.message || 'Failed to fetch participant info' });
       } finally {
         setLoadingInfo(false);
       }
     }
+  };
+
+  // Handle QR image upload
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      const img = new window.Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        const imageData = ctx.getImageData(0, 0, img.width, img.height);
+        const code = jsQR(imageData.data, img.width, img.height);
+        if (code && code.data) {
+          handleScan([{ rawValue: code.data }]);
+        } else {
+          setInfoError('No QR code found in the uploaded image.');
+        }
+      };
+      img.onerror = () => setInfoError('Failed to load image.');
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
   };
 
   // Filtered data for Bib Collection
@@ -108,6 +163,18 @@ function QRLogs() {
   React.useEffect(() => {
     setPage(0);
   }, [activeTab]);
+
+  const handleError = (err) => {
+    setToast({
+      type: 'error',
+      content: `Error: ${err?.message || err}`,
+    });
+  };
+
+  const handleModalClose = () => {
+    setQrValue(null);
+    setToast({ type: 'success', content: 'QR scanned successfully!' });
+  };
 
   return (
     <div style={{ minHeight: '100vh', background: '#f7fafd' }}>
@@ -176,12 +243,13 @@ function QRLogs() {
               >
                 &times;
               </button>
-              <Scanner
-                onResult={handleScan}
-                onError={err => alert('Camera error: ' + err)}
-                styles={{ container: { width: 320, height: 320 } }}
+              <QRScannerTest
+                onScan={handleScan}
+                onError={handleError}
+                onClose={() => setScannerOpen(false)}
+                hideNavbar={true}
+                hideCloseButton={true}
               />
-              <div style={{ textAlign: 'center', marginTop: 12, color: '#0B405B', fontWeight: 500 }}>Scan QR Code</div>
             </div>
           </div>
         )}
@@ -261,6 +329,58 @@ function QRLogs() {
         {infoError && (
           <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(255,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000 }}>
             <div style={{ background: '#fff', padding: 32, borderRadius: 8, fontSize: 18, color: '#e53935', fontWeight: 600 }}>{infoError}</div>
+          </div>
+        )}
+        {/* Modal to show scanned QR value */}
+        {qrValue && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000
+          }}>
+            <div style={{ background: '#fff', borderRadius: 8, padding: 32, minWidth: 320, minHeight: 120, position: 'relative', boxShadow: '0 2px 16px rgba(0,0,0,0.12)' }}>
+              <button
+                onClick={handleModalClose}
+                style={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  width: 36,
+                  height: 36,
+                  background: '#fff',
+                  color: '#0B405B',
+                  fontSize: 22,
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  zIndex: 10
+                }}
+                aria-label="Close"
+              >
+                &times;
+              </button>
+              <div style={{ fontWeight: 700, fontSize: 18, color: '#0B405B', marginBottom: 12 }}>Scanned QR Value</div>
+              <div style={{ fontWeight: 400, fontSize: 16, color: '#0B405B', wordBreak: 'break-all' }}>{qrValue}</div>
+            </div>
+          </div>
+        )}
+        {toast && (
+          <div style={{ position: 'fixed', top: 24, right: 24, zIndex: 2000 }}>
+            <Toast
+              type={toast.type}
+              content={toast.content}
+              onDismiss={() => setToast(null)}
+            />
           </div>
         )}
         {/* Search/filter/tabs bar */}

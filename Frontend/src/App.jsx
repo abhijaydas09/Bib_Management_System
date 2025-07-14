@@ -6,6 +6,7 @@ import StaffEventDetails from './pages/Staff/EventDetails';
 import StaffQRLogs from './pages/Staff/QRLogs';
 import StaffProfile from './pages/Staff/Profile';
 import QrPage from './pages/EventQRs';
+import QRScannerTest from './pages/Staff/QRScannerTest';
 // import ParticipantLogin from './pages/LoginSignUp/ParticipantLogin';
 // import OrganiserLogin from './pages/LoginSignUp/OrganiserLogin';
 // import Signup from './pages/LoginSignUp/Signup';
@@ -32,7 +33,8 @@ function App() {
         <Route path="/staff/event-details" element={<StaffEventDetails />} />
         <Route path="/staff/qr-logs" element={<StaffQRLogs />} />
         <Route path="/staff/profile" element={<StaffProfile />} />
-         <Route path="/qr/:eventId" element={<QrPage />} />
+        <Route path="/staff/qr-scanner-test" element={<QRScannerTest />} />
+        <Route path="/qr/:eventId" element={<QrPage />} />
         {/* Add other routes as needed */}
         <Route path="*" element={<Navigate to="/staff/login" />} />
       </Routes>
