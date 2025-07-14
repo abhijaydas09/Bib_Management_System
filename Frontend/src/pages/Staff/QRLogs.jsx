@@ -5,7 +5,7 @@ import BasicTextInput from '../../components/text-inputs/BasicTextInput';
 import { FaCamera } from 'react-icons/fa';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import axios from 'axios';
-import jsQR from 'jsqr';
+// import jsQR from 'jsqr';
 import Toast from '../../components/toast/Toast';
 import QRScannerTest from './QRScannerTest';
 

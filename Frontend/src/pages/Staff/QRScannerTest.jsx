@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import StaffNavbar from '../../components/tabs/StaffNavbar';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import Toast from '../../components/toast/Toast';
-import jsQR from 'jsqr';
+// import jsQR from 'jsqr';
 
 function QRScannerTest({ onScan, onError, onClose, hideNavbar, hideCloseButton }) {
   const [scannerOpen, setScannerOpen] = useState(true);
