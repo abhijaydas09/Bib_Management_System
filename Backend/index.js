@@ -7,6 +7,9 @@ import eventRouter from './routes/event.routes.js';
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
+import marathonRegistrationRoutes from './routes/marathonRegistration.routes.js';
+
+
 
 dotenv.config()
 let port = process.env.PORT || 6000 ;
@@ -21,6 +24,7 @@ app.use(cors());
 
 app.use("/api/auth",authRouter)
 app.use('/api/events', eventRouter);
+app.use('/',marathonRegistrationRoutes);
 
 app.listen(port , ()=>{
     connectDB()
