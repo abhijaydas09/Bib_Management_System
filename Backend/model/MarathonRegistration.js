@@ -28,6 +28,14 @@ const MarathonRegistrationSchema = new mongoose.Schema({
     enum: ['Pending', 'Collected'],
     default: 'Pending'
   },
+  bibCollectedBy: { type: String }, // Name of the staff who collected the bib
+  attendanceStatus: {
+    type: String,
+    enum: ['Absent', 'Present'],
+    default: 'Absent'
+  },
+  attendanceMarkedBy: { type: String }, // Name of the staff who marked attendance
+
 
   // Personal Info
   firstName: { type: String, required: true },
