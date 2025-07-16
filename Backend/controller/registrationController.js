@@ -20,6 +20,30 @@ export const verifyQrCode = async (req, res) => {
   }
 };
 
+export const verifyQrCodeJson = async (req, res) => {
+  const { qrCode } = req.params;
+  try {
+    const registration = await MarathonRegistration.findOne({ qrCode });
+    if (!registration) {
+      return res.status(200).json({ valid: false });
+    }
+    return res.status(200).json({
+      valid: true,
+      ticket: {
+        id: registration._id,
+        name: registration.firstName + ' ' + registration.lastName,
+        email: registration.email,
+        bibNumber: registration.bibNumber,
+        bibCollectionStatus: registration.bibCollectionStatus,
+        attendanceStatus: registration.attendanceStatus,
+        // add more fields as needed
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({ valid: false, error: 'Server error' });
+  }
+};
+
 export const markBibCollected = async (req, res) => {
   const { qrCode } = req.params;
   const { staffName } = req.body;

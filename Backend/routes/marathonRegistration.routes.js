@@ -4,11 +4,13 @@ import { verifyQrCode } from '../controller/registrationController.js';
 import { getRegistrationsByEvent } from '../controller/registrationController.js';
 import { markBibCollected } from '../controller/registrationController.js';
 import { markAttendance } from '../controller/registrationController.js';
+import { verifyQrCodeJson } from '../controller/registrationController.js';
 
 const router = express.Router();
 
 router.post('/api/registration', createMarathonRegistration);
 router.get('/api/registration/verify/:qrCode', verifyQrCode);
+router.get('/api/registration/verify-json/:qrCode', verifyQrCodeJson);
 router.get('/api/registrations/event/:eventId', getRegistrationsByEvent);
 router.post('/api/registration/markBib/:qrCode', markBibCollected);
 router.post('/api/registration/markAttendance/:qrCode', markAttendance);
