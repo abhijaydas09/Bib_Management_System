@@ -1,7 +1,7 @@
 import React from 'react';
 import './Table.css';
 
-function Table({ columns, data, summary, page, pageSize, total, onPageChange, onPageSizeChange, actionButton }) {
+function Table({ columns, data, summary, page, pageSize, total, onPageChange, onPageSizeChange }) {
   // Common page size options
   const pageSizeOptions = [5, 10, 20, 50, 100];
 
@@ -11,11 +11,6 @@ function Table({ columns, data, summary, page, pageSize, total, onPageChange, on
         <div className="table-summary" style={{ gap: 0, marginRight: 0, paddingRight: 0 }}>
           Showing {page * pageSize + 1}-{Math.min((page + 1) * pageSize, total)} [items]
         </div>
-        {actionButton && (
-          <div className="table-action" style={{ paddingRight: 0 }}>
-            {actionButton}
-          </div>
-        )}
       </div>
       <div className="table-scroll">
         <table className="table-main">

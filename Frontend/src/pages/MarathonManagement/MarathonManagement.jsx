@@ -7,6 +7,7 @@ import EditDetails from './EditDetails';
 import QRLogs from './QRLogs';
 import PreviewPage from './PreviewPage';
 import DeleteEvent from './DeleteEvent';
+import OrganiserNavbar from '../../components/tabs/OrganiserNavbar';
 import './MarathonManagement.css';
 
 // Single-color SVG icons (stroke: #0B405B, size: 22)
@@ -56,11 +57,14 @@ function MarathonManagement() {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <div className="marathon-management-layout" style={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar tabs={tabs} activeIndex={activeTab} onTabClick={setActiveTab} />
-      <main style={{ flex: 1, padding: '32px', background: '#f7fafd' }}>
-        {tabComponents[activeTab]}
-      </main>
+    <div style={{ width: '100vw', minHeight: '100vh', background: '#f7fafd' }}>
+      <OrganiserNavbar />
+      <div className="marathon-management-layout" style={{ display: 'flex', minHeight: 'calc(100vh - 66px)', width: '100vw' }}>
+        <Sidebar tabs={tabs} activeIndex={activeTab} onTabClick={setActiveTab} />
+        <main style={{ flex: 1, padding: 0, background: '#f7fafd', width: '100%' }}>
+          {tabComponents[activeTab]}
+        </main>
+      </div>
     </div>
   );
 }

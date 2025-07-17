@@ -7,6 +7,7 @@ import StaffQRLogs from './pages/Staff/QRLogs';
 import StaffProfile from './pages/Staff/Profile';
 import QrPage from './pages/EventQRs';
 import QRScannerTest from './pages/Staff/QRScannerTest';
+import MarathonManagement from './pages/MarathonManagement/MarathonManagement';
 // import ParticipantLogin from './pages/LoginSignUp/ParticipantLogin';
 // import OrganiserLogin from './pages/LoginSignUp/OrganiserLogin';
 // import Signup from './pages/LoginSignUp/Signup';
@@ -35,8 +36,9 @@ function App() {
         <Route path="/staff/profile" element={<StaffProfile />} />
         <Route path="/staff/qr-scanner-test" element={<QRScannerTest />} />
         <Route path="/qr/:eventId" element={<QrPage />} />
+        <Route path="/marathon-management" element={<MarathonManagement />} />
         {/* Add other routes as needed */}
-        <Route path="*" element={<Navigate to="/staff/login" />} />
+        <Route path="*" element={<Navigate to="/staff/home" />} />
       </Routes>
     </AuthContext.Provider>
   );

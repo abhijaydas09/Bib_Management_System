@@ -9,7 +9,8 @@
   width: 60px;
   min-width: 60px;
   max-width: 60px;
-  height: 100%;
+  height: 100vh;
+  min-height: 100vh;
   box-sizing: border-box;
   transition: width 0.5s ease;
 }

@@ -105,11 +105,18 @@ export const getRegistrationsByEvent = async (req, res) => {
   const { eventId } = req.params;
 
   try {
-    const registrations = await MarathonRegistration.find({ event: eventId });
+    // Populate category to get category_name
+    const registrations = await MarathonRegistration.find({ event: eventId }).populate('category');
+
+    // Map registrations to include category name instead of ID
+    const data = registrations.map(reg => ({
+      ...reg.toObject(),
+      category: reg.category?.category_name || '',
+    }));
 
     return res.status(200).json({
       success: true,
-      data: registrations
+      data
     });
   } catch (err) {
     console.error("Error fetching registrations by event:", err);

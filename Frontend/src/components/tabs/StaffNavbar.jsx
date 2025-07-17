@@ -40,7 +40,7 @@ function StaffNavbar({ onTabClick, activeTab,  }) {
             onClick={
               onTabClick
                 ? () => onTabClick(tab.path)
-                : () => navigate(tab.path)
+                : undefined
             }
             style={{
               borderBottom: activeTab && activeTab === tab.path ? '2px solid #A8FD24' : 'none',
@@ -51,16 +51,24 @@ function StaffNavbar({ onTabClick, activeTab,  }) {
               transition: 'color 0.18s',
             }}
           >
+            {tab.icon}
             {tab.label && <span>{tab.label}</span>}
           </button>
         ))}
-        {(!isLoggedIn ) ? (
+        {(!isLoggedIn) ? (
           <button className="navbar-login-btn" onClick={() => navigate('/staff/login')} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', marginLeft: 8, fontWeight: 400, fontSize: 14 }}>
             Login
           </button>
         ) : (
-          <button className="navbar-profile-btn" onClick={() => navigate('/staff/profile')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', marginLeft: 8 }}>
-            <FaUserCircle size={22} color="#fff" />
+          <button
+            className="navbar-logout-btn"
+            onClick={() => {
+              localStorage.removeItem('staff');
+              navigate('/staff/login');
+            }}
+            style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', marginLeft: 8, fontWeight: 400, fontSize: 14 }}
+          >
+            Logout
           </button>
         )}
         <button className="navbar-darklight-btn" onClick={() => { /* dark mode toggle */ }}>
