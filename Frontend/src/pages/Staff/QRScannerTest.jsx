@@ -1,188 +1,250 @@
 import React, { useState, useRef, useEffect } from 'react';
 import StaffNavbar from '../../components/tabs/StaffNavbar';
 import Toast from '../../components/toast/Toast';
-import { Html5Qrcode } from 'html5-qrcode';
+import jsQR from 'jsqr';
+import ParticipantDetailsModal from '../../components/modal/ParticipantDetailsModal';
 
-function QRScannerTest({ onScan, onError, onClose, hideNavbar, hideCloseButton }) {
-  const [scannerOpen, setScannerOpen] = useState(true);
-  const [toast, setToast] = useState(null);
-  const [qrValue, setQrValue] = useState(null);
+const QRScannerTest = ({ onScan, onError, onClose, hideNavbar, hideCloseButton }) => {
+  const [isScanning, setIsScanning] = useState(false);
+  const [scannedData, setScannedData] = useState(null);
+  const [error, setError] = useState('');
   const [ticketInfo, setTicketInfo] = useState(null);
-  const [error, setError] = useState(null);
-  const fileInputRef = useRef();
-  const html5QrCodeRef = useRef(null);
+  const [toast, setToast] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
+  const scanIntervalRef = useRef(null);
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        }
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current.play();
+          setIsScanning(true);
+          startScanning();
+        };
+      }
+      setError('');
+    } catch (err) {
+      setError('Camera access denied or not available');
+      console.error('Camera error:', err);
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    if (scanIntervalRef.current) {
+      clearInterval(scanIntervalRef.current);
+      scanIntervalRef.current = null;
+    }
+    setIsScanning(false);
+  };
+
+  // Helper to extract code from URL or plain code
+  const extractQrCode = (data) => {
+    // Match full URL, path, or just the code
+    const match = data.match(/(?:https?:\/\/[^\/]+)?\/api\/registration\/verify(?:-json)?\/([a-zA-Z0-9]+)/);
+    if (match) return match[1];
+    // If it's just the code, return as is
+    return data;
+  };
+
+  const startScanning = () => {
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+    const context = canvas.getContext('2d');
+    scanIntervalRef.current = setInterval(() => {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
+        if (qrCode) {
+          setScannedData(qrCode.data);
+          const code = extractQrCode(qrCode.data);
+          console.log('Extracted code:', code); // Debug log
+          validateTicket(code);
+          stopCamera();
+        }
+      }
+    }, 100);
+  };
+
+  const validateTicket = async (qrCode) => {
+    try {
+      console.log('Fetching:', `/api/registration/verify-json/${qrCode}`);
+      const response = await fetch(`/api/registration/verify-json/${qrCode}`);
+      console.log('Fetch response:', response);
+      const result = await response.json();
+      console.log('Backend result:', result);
+      if (result.valid) {
+        setTicketInfo(result.ticket);
+        setToast({ type: 'success', content: '✅ Valid ticket: ' + result.ticket.name });
+        setModalOpen(true);
+      } else {
+        setTicketInfo(null);
+        setToast({ type: 'error', content: '❌ Invalid or already used ticket.' });
+      }
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setTicketInfo(null);
+      setToast({ type: 'error', content: 'Error validating ticket' });
+    }
+  };
 
   useEffect(() => {
-    let isMounted = true;
-    let html5QrCodeInstance = null;
-    if (scannerOpen) {
-      const qrRegionId = 'qr-reader';
-      setTimeout(() => {
-        const qrDiv = document.getElementById(qrRegionId);
-        if (qrDiv && isMounted) {
-          html5QrCodeInstance = new Html5Qrcode(qrRegionId);
-          html5QrCodeRef.current = html5QrCodeInstance;
-          html5QrCodeInstance
-            .start(
-              { facingMode: 'environment' },
-              { fps: 10, qrbox: 250 },
-              async (decodedText) => {
-                setScannerOpen(false);
-                setQrValue(decodedText);
-                // Validate ticket with backend
-                try {
-                  const response = await fetch(`/api/registration/verify-json/${decodedText}`);
-                  const result = await response.json();
-                  if (result.valid) {
-                    setTicketInfo(result.ticket);
-                    setToast({ type: 'success', content: '✅ Valid ticket: ' + result.ticket.name });
-                  } else {
-                    setTicketInfo(null);
-                    setToast({ type: 'error', content: '❌ Invalid or already used ticket.' });
-                  }
-                } catch (err) {
-                  setTicketInfo(null);
-                  setToast({ type: 'error', content: 'Error validating ticket' });
-                }
-                if (onScan) onScan([{ rawValue: decodedText }]);
-                if (onClose) onClose();
-                html5QrCodeInstance && html5QrCodeInstance.stop().catch(() => {});
-              },
-              (scanError) => {
-                // Optionally handle scan errors
-              }
-            )
-            .catch((err) => {
-              setToast({ type: 'error', content: `Camera error: ${err}` });
-              if (onError) onError(err);
-            });
-        }
-      }, 100);
-    }
     return () => {
-      isMounted = false;
-      if (html5QrCodeRef.current) {
-        const qrInstance = html5QrCodeRef.current;
-        qrInstance.stop()
-          .then(() => qrInstance.clear())
-          .catch(() => {})
-          .finally(() => {
-            html5QrCodeRef.current = null;
-          });
-      }
+      stopCamera();
     };
     // eslint-disable-next-line
-  }, [scannerOpen]);
+  }, []);
 
   const handleModalClose = () => {
-    setQrValue(null);
+    setScannedData(null);
     setTicketInfo(null);
-    setScannerOpen(false);
+    setIsScanning(false);
+    setModalOpen(false);
+    stopCamera();
     if (onClose) onClose();
   };
 
-  // Handle QR image upload
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // Handler for Mark Attendance
+  const handleMarkAttendance = async () => {
+    if (!ticketInfo || !ticketInfo.qrCode) return;
+    const staffName = prompt('Enter your name to mark attendance:');
+    if (!staffName) return;
     try {
-      const result = await Html5Qrcode.scanFileV2(file, true);
-      if (result && result.decodedText) {
-        setScannerOpen(false);
-        setQrValue(result.decodedText);
-        // Validate ticket with backend
-        try {
-          const response = await fetch(`/api/registration/verify-json/${result.decodedText}`);
-          const backendResult = await response.json();
-          if (backendResult.valid) {
-            setTicketInfo(backendResult.ticket);
-            setToast({ type: 'success', content: '✅ Valid ticket: ' + backendResult.ticket.name });
-          } else {
-            setTicketInfo(null);
-            setToast({ type: 'error', content: '❌ Invalid or already used ticket.' });
-          }
-        } catch (err) {
-          setTicketInfo(null);
-          setToast({ type: 'error', content: 'Error validating ticket' });
-        }
-        if (onScan) onScan([{ rawValue: result.decodedText }]);
-        if (onClose) onClose();
+      const response = await fetch(`/api/registration/markAttendance/${ticketInfo.qrCode}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ staffName })
+      });
+      if (response.ok) {
+        setToast({ type: 'success', content: 'Attendance marked!' });
+        setModalOpen(false);
       } else {
-        setToast({ type: 'error', content: 'No QR code found in the uploaded image.' });
-        if (onError) onError(new Error('No QR code found in the uploaded image.'));
+        const text = await response.text();
+        setToast({ type: 'error', content: text || 'Failed to mark attendance.' });
       }
     } catch (err) {
-      setToast({ type: 'error', content: 'Failed to scan QR from image.' });
-      if (onError) onError(err);
+      setToast({ type: 'error', content: 'Error marking attendance.' });
+    }
+  };
+
+  // Handler for Mark Bib Collected
+  const handleMarkBibCollected = async () => {
+    if (!ticketInfo || !ticketInfo.qrCode) return;
+    const staffName = prompt('Enter your name to mark bib collected:');
+    if (!staffName) return;
+    try {
+      const response = await fetch(`/api/registration/markBib/${ticketInfo.qrCode}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ staffName })
+      });
+      if (response.ok) {
+        setToast({ type: 'success', content: 'Bib marked as collected!' });
+        setModalOpen(false);
+      } else {
+        const text = await response.text();
+        setToast({ type: 'error', content: text || 'Failed to mark bib collected.' });
+      }
+    } catch (err) {
+      setToast({ type: 'error', content: 'Error marking bib collected.' });
     }
   };
 
   return (
     <>
       {!hideNavbar && <StaffNavbar />}
-      {scannerOpen && (
-        <div style={{ position: 'relative', minWidth: 320 }}>
-          {!hideCloseButton && (
-            <button
-              onClick={handleModalClose}
-              style={{
-                position: 'absolute',
-                top: 8,
-                right: 8,
-                width: 36,
-                height: 36,
-                background: '#fff',
-                color: '#0B405B',
-                fontSize: 22,
-                fontWeight: 700,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                zIndex: 10
-              }}
-              aria-label="Close"
-            >
-              &times;
-            </button>
-          )}
-          <div id="qr-reader" style={{ width: 320, height: 320, margin: '0 auto' }} />
-          <div style={{ textAlign: 'center', marginTop: 12, color: '#0B405B', fontWeight: 500 }}>Scan QR Code</div>
-          <div style={{ textAlign: 'center', marginTop: 16 }}>
-            <button
-              style={{
-                background: '#0B405B',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 2,
-                padding: '8px 18px',
-                fontWeight: 500,
-                fontSize: 13,
-                cursor: 'pointer',
-                marginTop: 8
-              }}
-              onClick={() => fileInputRef.current && fileInputRef.current.click()}
-            >
-              Upload QR
-            </button>
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
-          </div>
+      <div style={{ position: 'relative', minWidth: 320, marginTop: 24 }}>
+        {!hideCloseButton && (
+          <button
+            onClick={handleModalClose}
+            style={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              width: 36,
+              height: 36,
+              background: '#fff',
+              color: '#0B405B',
+              fontSize: 22,
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              zIndex: 10
+            }}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        )}
+        <video ref={videoRef} style={{ width: 320, height: 240, border: '1px solid #ccc', borderRadius: 4, display: isScanning ? 'block' : 'none', margin: '0 auto' }} />
+        <canvas ref={canvasRef} style={{ display: 'none' }} />
+        <div style={{ textAlign: 'center', marginTop: 12, color: '#0B405B', fontWeight: 500 }}>Scan QR Code</div>
+        <div style={{ textAlign: 'center', marginTop: 16 }}>
+          <button
+            style={{
+              background: '#0B405B',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 2,
+              padding: '8px 18px',
+              fontWeight: 500,
+              fontSize: 13,
+              cursor: 'pointer',
+              marginRight: 8
+            }}
+            onClick={startCamera}
+            disabled={isScanning}
+          >
+            Start Scanner
+          </button>
+          <button
+            style={{
+              background: '#888',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 2,
+              padding: '8px 18px',
+              fontWeight: 500,
+              fontSize: 13,
+              cursor: 'pointer',
+              marginLeft: 8
+            }}
+            onClick={stopCamera}
+            disabled={!isScanning}
+          >
+            Stop Scanner
+          </button>
         </div>
-      )}
-      {ticketInfo && (
-        <div style={{ border: '1px solid green', padding: '1rem', marginTop: '1rem', borderRadius: 4, background: '#f6fff6', color: '#0B405B', maxWidth: 400, marginLeft: 'auto', marginRight: 'auto' }}>
-          <p><strong>Name:</strong> {ticketInfo.name}</p>
-          <p><strong>Ticket ID:</strong> {ticketInfo.id}</p>
-          <p><strong>Email:</strong> {ticketInfo.email}</p>
-        </div>
-      )}
+      </div>
+      {error && <div style={{ color: 'red', marginTop: 8, textAlign: 'center' }}>{error}</div>}
+      <ParticipantDetailsModal
+        open={modalOpen}
+        onClose={handleModalClose}
+        participant={ticketInfo}
+        onMarkAttendance={handleMarkAttendance}
+        onMarkBibCollected={handleMarkBibCollected}
+      />
       {toast && (
         <Toast
           type={toast.type}
@@ -192,6 +254,6 @@ function QRScannerTest({ onScan, onError, onClose, hideNavbar, hideCloseButton }
       )}
     </>
   );
-}
+};
 
 export default QRScannerTest; 

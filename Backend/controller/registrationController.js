@@ -1,29 +1,41 @@
 import MarathonRegistration from "../model/MarathonRegistration.js";
+import Category from "../model/Category.js";
 
 export const verifyQrCode = async (req, res) => {
   const { qrCode } = req.params;
-
   try {
-    const registration = await MarathonRegistration.findOne({ qrCode });
-
+    const registration = await MarathonRegistration.findOne({ qrCode }).populate('category');
     if (!registration) {
-      return res.status(404).send("QR Code not found or invalid");
+      return res.status(404).json({ valid: false, message: 'QR Code not found or invalid' });
     }
-
-    return res.render('verifyPage', {
-      registration
+    return res.status(200).json({
+      valid: true,
+      ticket: {
+        id: registration._id,
+        qrCode: registration.qrCode,
+        name: registration.firstName + ' ' + registration.lastName,
+        email: registration.email,
+        bibNumber: registration.bibNumber,
+        bibCollectionStatus: registration.bibCollectionStatus,
+        attendanceStatus: registration.attendanceStatus,
+        eventName: registration.eventName || '',
+        category: registration.category?.category_name || '',
+        tShirtSize: registration.kitSize || '',
+        eventDate: registration.eventDate || '',
+        venue: registration.venue || '',
+        // add more fields as needed
+      }
     });
-
   } catch (err) {
-    console.error("QR Verification failed:", err);
-    return res.status(500).send("Server error");
+    console.error('QR Verification failed:', err);
+    return res.status(500).json({ valid: false, error: 'Server error' });
   }
 };
 
 export const verifyQrCodeJson = async (req, res) => {
   const { qrCode } = req.params;
   try {
-    const registration = await MarathonRegistration.findOne({ qrCode });
+    const registration = await MarathonRegistration.findOne({ qrCode }).populate('category');
     if (!registration) {
       return res.status(200).json({ valid: false });
     }
@@ -31,11 +43,17 @@ export const verifyQrCodeJson = async (req, res) => {
       valid: true,
       ticket: {
         id: registration._id,
+        qrCode: registration.qrCode,
         name: registration.firstName + ' ' + registration.lastName,
         email: registration.email,
         bibNumber: registration.bibNumber,
         bibCollectionStatus: registration.bibCollectionStatus,
         attendanceStatus: registration.attendanceStatus,
+        eventName: registration.eventName || '',
+        category: registration.category?.category_name || '',
+        tShirtSize: registration.kitSize || '',
+        eventDate: registration.eventDate || '',
+        venue: registration.venue || '',
         // add more fields as needed
       }
     });

@@ -8,6 +8,7 @@ const StaffSchema = new mongoose.Schema({
   password: { type: String, required: true }, // hashed password
   event: { type: mongoose.Schema.Types.ObjectId, ref: 'Event', required: true },
   activity: { type: String, enum: ['Online', 'Offline'], default: 'Offline' },
+  loginEnabled: { type: Boolean, default: false },
 }, { timestamps: true });
 
 const Staff = mongoose.model('Staff', StaffSchema);
