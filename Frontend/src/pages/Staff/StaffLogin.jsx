@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function StaffLogin() {
-  const [email, setEmail] = useState('');
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ function StaffLogin() {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8000/api/auth/staff_login', {
-        email,
+        userId,
         password
       });
 
@@ -22,15 +22,13 @@ function StaffLogin() {
       // Save staff to localStorage
       localStorage.setItem('staff', JSON.stringify(response.data.staff));
 
-      alert('Login successful!');
+      //alert('Login successful!');
       navigate('/staff/home');
     } catch (err) {
       console.error('Login failed:', err.response?.data || err.message);
       alert(err.response?.data?.message || 'Login failed');
     }
   };
-
-  // handleSignupClick and signup link removed
 
   return (
     <div
@@ -104,11 +102,11 @@ function StaffLogin() {
                 }}
               >
                 <input
-                  id="staff-email"
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  id="staff-userid"
+                  type="text"
+                  placeholder="User ID"
+                  value={userId}
+                  onChange={e => setUserId(e.target.value)}
                   required
                   className="basic-textinput-input"
                   style={{
