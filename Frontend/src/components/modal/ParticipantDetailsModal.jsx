@@ -78,7 +78,7 @@ const ParticipantDetailsModal = ({
                 marginBottom: 8,
               }}
             >
-              {participant.eventName || 'EVENT NAME'}
+              {participant.eventName?.name || 'EVENT NAME'}
             </div>
             <div
               style={{
@@ -153,45 +153,48 @@ const ParticipantDetailsModal = ({
             </div>
           </div>
         </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: 8,
-            marginTop: 32,
-          }}
-        >
-          <button
-            onClick={onMarkAttendance}
-            style={{
-              background: '#eaf1fb',
-              color: '#0B405B',
-              border: 'none',
-              borderRadius: 4,
-              padding: '8px 16px',
-              fontWeight: 500,
-              fontSize: 14,
-              cursor: 'pointer',
-            }}
-          >
-            Mark Attendance
-          </button>
-          <button
-            onClick={onMarkBibCollected}
-            style={{
-              background: '#0B405B',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 4,
-              padding: '8px 16px',
-              fontWeight: 500,
-              fontSize: 14,
-              cursor: 'pointer',
-            }}
-          >
-            Bib Collected
-          </button>
-        </div>
+       <div
+  style={{
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: 8,
+    marginTop: 32,
+  }}
+>
+  <button
+    onClick={onMarkAttendance}
+    disabled={participant?.attendanceStatus === 'Present'}
+    style={{
+      background: participant?.attendanceStatus === 'Present' ? '#ccc' : '#eaf1fb',
+      color: '#0B405B',
+      border: 'none',
+      borderRadius: 4,
+      padding: '8px 16px',
+      fontWeight: 500,
+      fontSize: 14,
+      cursor: participant?.attendanceStatus === 'Present' ? 'not-allowed' : 'pointer',
+    }}
+  >
+    {participant?.attendanceStatus === 'Present' ? 'Marked' : 'Mark Attendance'}
+  </button>
+
+  <button
+    onClick={onMarkBibCollected}
+    disabled={participant?.bibCollectionStatus === 'Collected'}
+    style={{
+      background: participant?.bibCollectionStatus === 'Collected' ? '#ccc' : '#0B405B',
+      color: '#fff',
+      border: 'none',
+      borderRadius: 4,
+      padding: '8px 16px',
+      fontWeight: 500,
+      fontSize: 14,
+      cursor: participant?.bibCollectionStatus === 'Collected' ? 'not-allowed' : 'pointer',
+    }}
+  >
+    {participant?.bibCollectionStatus === 'Collected' ? 'Collected' : 'Bib Collected'}
+  </button>
+</div>
       </div>
     </div>
   );

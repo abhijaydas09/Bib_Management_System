@@ -125,7 +125,7 @@ const QRScannerTest = ({ onScan, onError, onClose, hideNavbar, hideCloseButton }
   // Handler for Mark Attendance
   const handleMarkAttendance = async () => {
     if (!ticketInfo || !ticketInfo.qrCode) return;
-    const staffName = prompt('Enter your name to mark attendance:');
+    const staffName = prompt('Enter your name to mark atdance:');
     if (!staffName) return;
     try {
       const response = await fetch(`/api/registration/markAttendance/${ticketInfo.qrCode}`, {
