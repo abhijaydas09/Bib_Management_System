@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from '../../components/table/Table';
 import BasicTextInput from '../../components/text-inputs/BasicTextInput';
 import AddStaffModal from '../../components/modal/AddStaffModal';
+import axios from 'axios';
 
 function ActionMenu({ onViewQRLogs, onRemove }) {
   const [open, setOpen] = useState(false);
@@ -51,7 +52,7 @@ const staffColumns = [
   { label: 'Last Name', key: 'lastName' },
   { label: 'Phone Number', key: 'phoneNumber' },
   { label: 'User-ID', key: 'userId' },
-  { label: 'Role', key: 'role' },
+  { label: 'Role', key: 'role', render: () => 'Staff' },
   { label: 'Activity', key: 'activity', render: (val) => (
       <span style={{ color: val === 'Online' ? '#4CAF50' : '#e53935', fontWeight: 500 }}>{val}</span>
     ) },
@@ -63,18 +64,7 @@ const staffColumns = [
     ) },
 ];
 
-const mockStaff = [
-  { userId: 'zemo_staff', firstName: 'Archit', lastName: 'Chitte', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Online' },
-  { userId: 'zemo_staff', firstName: 'Abhijay', lastName: 'Das', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Offline' },
-  { userId: 'zemo_staff', firstName: 'Samresh', lastName: 'Chaudhari', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Staff', activity: 'Offline' },
-  { userId: 'zemo_staff', firstName: 'Nidhi', lastName: 'Purthan', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Online' },
-  { userId: 'zemo_staff', firstName: 'Parth', lastName: 'Narkar', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Offline' },
-  { userId: 'zemo_staff', firstName: 'Varun', lastName: 'Rahatgaonkar', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Online' },
-  { userId: 'zemo_staff', firstName: 'Tanaya', lastName: 'Jain', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Offline' },
-  { userId: 'zemo_staff', firstName: 'Atharva', lastName: 'Pingle', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Online' },
-  { userId: 'zemo_staff', firstName: 'Nikhil', lastName: 'Kale', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Offline' },
-  { userId: 'zemo_staff', firstName: 'Amav', lastName: 'Choudhary', phoneNumber: '+91-90867 54857', role: 'Staff', activity: 'Online' },
-];
+const EVENT_ID = '68710b78d6126635978b59b2';
 
 export default function ManageStaff() {
   const [search, setSearch] = useState('');
@@ -84,11 +74,28 @@ export default function ManageStaff() {
   const [pageSize, setPageSize] = useState(10);
   const [selected, setSelected] = useState(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [staff, setStaff] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchStaff = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(`http://localhost:8000/api/auth/staff_by_event/${EVENT_ID}`, { withCredentials: true });
+        setStaff(res.data);
+      } catch (err) {
+        alert('Error fetching staff: ' + (err.response?.data?.message || err.message));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStaff();
+  }, []);
 
   // Filtered data
-  const filteredData = mockStaff.filter(row =>
+  const filteredData = staff.filter(row =>
     row.firstName.toLowerCase().includes(search.toLowerCase()) ||
-    row.lastName.toLowerCase().includes(search.toLowerCase()) ||
+    row.lastName.toLowerCase().includes(search) ||
     row.phoneNumber.includes(search) ||
     row.userId.includes(search)
   );
@@ -150,12 +157,30 @@ export default function ManageStaff() {
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
       />
+      {loading && <div style={{textAlign:'center', color:'#0B405B'}}>Loading staff...</div>}
       <AddStaffModal
         open={addModalOpen}
         onClose={() => setAddModalOpen(false)}
-        onAddStaff={form => {
-          setAddModalOpen(false);
-          alert('Staff added: ' + JSON.stringify(form));
+        onAddStaff={async form => {
+          // Map frontend form fields to backend API fields
+          const payload = {
+            firstName: form.firstName,
+            lastName: form.lastName,
+            phoneNumber: form.phone, // backend expects phoneNumber
+            userId: form.userId,
+            password: form.password,
+            event: EVENT_ID, // hardcoded event ID
+          };
+          try {
+            await axios.post('http://localhost:8000/api/auth/staff_signup', payload, { withCredentials: true });
+            setAddModalOpen(false);
+            // Refresh staff list after adding
+            const res = await axios.get(`http://localhost:8000/api/auth/staff_by_event/${EVENT_ID}`, { withCredentials: true });
+            setStaff(res.data);
+            alert('Staff added successfully!');
+          } catch (err) {
+            alert('Error adding staff: ' + (err.response?.data?.message || err.message));
+          }
         }}
       />
     </div>

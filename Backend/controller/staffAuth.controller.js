@@ -79,4 +79,15 @@ const staffLogout = async (req, res) => {
     }
 };
 
-export { staffSignup, staffLogin, staffLogout };
+// Get staff by event ID
+const getStaffByEvent = async (req, res) => {
+    try {
+        const { eventId } = req.params;
+        const staffList = await Staff.find({ event: eventId });
+        return res.status(200).json(staffList);
+    } catch (error) {
+        return res.status(500).json({ message: `Error fetching staff for event: ${error}` });
+    }
+};
+
+export { staffSignup, staffLogin, staffLogout, getStaffByEvent };
