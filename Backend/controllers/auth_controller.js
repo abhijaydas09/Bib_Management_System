@@ -1,39 +1,69 @@
-import genToken from "../config/token.js";
-import Player from "../model/player.model.js"
-import bcrypt from "bcryptjs"
+const { genToken } = require('../config/token');
+const bcrypt = require('bcryptjs');
+const Participant = require('../models/Participants');
 
-export const signUp=async (req,res)=>{
+const signUp = async (req, res) => {
     try {
-         let{ firstName, lastName, gender, phoneNumber, email, password } = req.body;
-         const profilePhoto = req.file ? req.file.path : ""; // assuming multer is used
+        const { firstName, lastName, gender, phoneNumber, email, password } = req.body;
+        const profilePhoto = req.file ? req.file.path : '';
 
-         const existingPlayer = await Player.findOne({ email });
-        if (existingPlayer) {
-            return res.status(400).json({ message: "Email already registered" });
-        }
-        
+        const existing = await Participant.findOne({ $or: [{ email }, { phoneNumber }] });
+        if (existing) return res.status(400).json({ message: 'Email or phone already registered' });
+
         const hashedPassword = await bcrypt.hash(password, 10);
-
-         const player = await Player.create({
+        const participant = await Participant.create({
             firstName,
             lastName,
-            profilePhoto,
+            profilePicture: profilePhoto,
             gender,
             phoneNumber,
             email,
-            password: hashedPassword
+            password: hashedPassword,
         });
 
-        let token = await genToken(player._id);
-        res.cookie("token", token,{
+        const token = genToken(participant._id);
+        const secureFlag = process.env.NODE_ENV === 'production';
+        res.cookie('token', token, {
             httpOnly: true,
-            secure:process.env.NODE_ENVIRONMENT= "production",
-            sameSite : "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-        return res.status(201).json(player)
+            secure: secureFlag,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        const out = participant.toObject();
+        delete out.password;
+        return res.status(201).json(out);
+    } catch (error) {
+        return res.status(500).json({ message: `signup error ${error.message}` });
     }
-    catch (error){
-            return res.status(500).json({message: `signup error ${error} `})
+};
+
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
+
+        const user = await Participant.findOne({ email });
+        if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) return res.status(401).json({ message: 'Invalid credentials' });
+
+        const token = genToken(user._id);
+        const secureFlag = process.env.NODE_ENV === 'production';
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: secureFlag,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        const out = user.toObject();
+        delete out.password;
+        return res.json(out);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-}
+};
+
+module.exports = { signUp, login };
